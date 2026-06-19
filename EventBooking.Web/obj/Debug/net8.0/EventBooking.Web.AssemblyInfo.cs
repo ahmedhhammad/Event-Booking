@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EventBooking.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4ab73aaffa596c7896ab6feaa1869082e5c2bdb2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5114d8be36dfbb169cfe2d1298bd30b8c74de71")]
 [assembly: System.Reflection.AssemblyProductAttribute("EventBooking.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EventBooking.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,4 +1,4 @@
-git rm -r --cached bin obj EventBooking.Web/bin EventBooking.Web/obj EventBooking.BLL/bin EventBooking.BLL/obj EventBooking.DAL/bin EventBooking.DAL/obj
+git rm -r --cached EventBooking.BLL/bin EventBooking.BLL/obj EventBooking.DAL/bin EventBooking.DAL/obj EventBooking.Web/bin EventBooking.Web/obj
 git add .gitignore
-git commit -m "stop tracking build output"
+git commit -m "ignore build output"
 git push

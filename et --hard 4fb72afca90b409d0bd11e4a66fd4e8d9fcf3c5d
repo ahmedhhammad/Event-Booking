@@ -1,0 +1,53 @@
+[33mcommit 6bd7120108105627cd7295a028be62db1cfffcae[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: ahmedhhammad <ahmedh.hammad11@gmail.com>
+Date:   Fri Jun 19 09:55:36 2026 +0300
+
+    empty
+
+[33mcommit 4fb72afca90b409d0bd11e4a66fd4e8d9fcf3c5d[m
+Author: ahmedhhammad <ahmedh.hammad11@gmail.com>
+Date:   Fri Jun 19 09:51:59 2026 +0300
+
+    ignore
+
+[33mcommit 12492b237d5f9e92725ee59ae690bdbfe6973fa7[m
+Author: ahmedhhammad <98718441+ahmedhhammad@users.noreply.github.com>
+Date:   Fri Jun 19 09:26:49 2026 +0300
+
+    Delete ARCHITECTURE.md
+
+[33mcommit b422b52c104c7590bd3f222a3b8254ffe347463b[m
+Author: ahmedhhammad <ahmedh.hammad11@gmail.com>
+Date:   Fri Jun 19 09:22:53 2026 +0300
+
+    ARCH
+
+[33mcommit b5114d8be36dfbb169cfe2d1298bd30b8c74de71[m
+Author: ahmedhhammad <ahmedh.hammad11@gmail.com>
+Date:   Fri Jun 19 09:14:49 2026 +0300
+
+    DAL_BLL_WEB
+
+[33mcommit 4ab73aaffa596c7896ab6feaa1869082e5c2bdb2[m
+Author: ahmedhhammad <ahmedh.hammad11@gmail.com>
+Date:   Fri Jun 19 09:12:51 2026 +0300
+
+    Web-BLL-DAL
+
+[33mcommit 4804caf118e281603c727f3ca62add5f244af126[m
+Author: ahmedhhammad <ahmedh.hammad11@gmail.com>
+Date:   Fri Jun 19 09:07:51 2026 +0300
+
+    db_CRUD
+
+[33mcommit c0d65bd1caaa2117041d78873cb1978407eb875d[m
+Author: ahmedhhammad <ahmedh.hammad11@gmail.com>
+Date:   Fri Jun 19 09:00:16 2026 +0300
+
+    initialize
+
+[33mcommit 524a6f1d4899102497c3c19507aa772340ea1dfe[m
+Author: ahmedhhammad <98718441+ahmedhhammad@users.noreply.github.com>
+Date:   Thu Mar 5 22:35:47 2026 +0200
+
+    Initial commit

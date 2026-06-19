@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EventBooking.BLL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4804caf118e281603c727f3ca62add5f244af126")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4ab73aaffa596c7896ab6feaa1869082e5c2bdb2")]
 [assembly: System.Reflection.AssemblyProductAttribute("EventBooking.BLL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EventBooking.BLL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

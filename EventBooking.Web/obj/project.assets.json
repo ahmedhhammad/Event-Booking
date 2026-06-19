@@ -1,0 +1,183 @@
+{
+  "version": 4,
+  "targets": {
+    "net9.0": {
+      "EventBooking.BLL/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "EventBooking.DAL": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EventBooking.BLL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventBooking.BLL.dll": {}
+        }
+      },
+      "EventBooking.DAL/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EventBooking.DAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventBooking.DAL.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "EventBooking.BLL/1.0.0": {
+      "type": "project",
+      "path": "../EventBooking.BLL/EventBooking.BLL.csproj",
+      "msbuildProject": "../EventBooking.BLL/EventBooking.BLL.csproj"
+    },
+    "EventBooking.DAL/1.0.0": {
+      "type": "project",
+      "path": "../EventBooking.DAL/EventBooking.DAL.csproj",
+      "msbuildProject": "../EventBooking.DAL/EventBooking.DAL.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net9.0": [
+      "EventBooking.BLL >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\GM\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.Web\\EventBooking.Web.csproj",
+      "projectName": "EventBooking.Web",
+      "projectPath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.Web\\EventBooking.Web.csproj",
+      "packagesPath": "C:\\Users\\GM\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.Web\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\GM\\AppData\\Roaming\\NuGet\\NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "frameworks": {
+        "net9.0": {
+          "framework": "net9.0",
+          "targetAlias": "net9.0",
+          "projectReferences": {
+            "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.BLL\\EventBooking.BLL.csproj": {
+              "projectPath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.BLL\\EventBooking.BLL.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "10.0.300"
+    },
+    "frameworks": {
+      "net9.0": {
+        "framework": "net9.0",
+        "targetAlias": "net9.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[9.0.17, 9.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[9.0.17, 9.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[9.0.17, 9.0.17]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[9.0.17, 9.0.17]"
+          }
+        ],
+        "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.EntityFrameworkCore.SqlServer (>= 9.0.0)' for 'net9.0'.",
+      "libraryId": "Microsoft.EntityFrameworkCore.SqlServer",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.NETCore.App.Ref (= 9.0.17)' for 'net9.0'.",
+      "libraryId": "Microsoft.NETCore.App.Ref",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.WindowsDesktop.App.Ref (= 9.0.17)' for 'net9.0'.",
+      "libraryId": "Microsoft.WindowsDesktop.App.Ref",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.AspNetCore.App.Ref (= 9.0.17)' for 'net9.0'.",
+      "libraryId": "Microsoft.AspNetCore.App.Ref",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.NETCore.App.Host.win-x64 (= 9.0.17)' for 'net9.0'.",
+      "libraryId": "Microsoft.NETCore.App.Host.win-x64",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
+}

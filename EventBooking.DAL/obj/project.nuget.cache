@@ -1,0 +1,75 @@
+{
+  "version": 2,
+  "dgSpecHash": "cl9sPlyyfzo=",
+  "success": false,
+  "projectFilePath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.EntityFrameworkCore.SqlServer (>= 9.0.0)' for 'net9.0'.",
+      "projectPath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "filePath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "libraryId": "Microsoft.EntityFrameworkCore.SqlServer",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.EntityFrameworkCore.Design (>= 9.0.0)' for 'net9.0'.",
+      "projectPath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "filePath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "libraryId": "Microsoft.EntityFrameworkCore.Design",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.EntityFrameworkCore.Tools (>= 9.0.0)' for 'net9.0'.",
+      "projectPath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "filePath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "libraryId": "Microsoft.EntityFrameworkCore.Tools",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.NETCore.App.Ref (= 9.0.17)' for 'net9.0'.",
+      "projectPath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "filePath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "libraryId": "Microsoft.NETCore.App.Ref",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.WindowsDesktop.App.Ref (= 9.0.17)' for 'net9.0'.",
+      "projectPath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "filePath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "libraryId": "Microsoft.WindowsDesktop.App.Ref",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.AspNetCore.App.Ref (= 9.0.17)' for 'net9.0'.",
+      "projectPath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "filePath": "C:\\Users\\GM\\Documents\\event_booking_NET\\Event-Booking\\EventBooking.DAL\\EventBooking.DAL.csproj",
+      "libraryId": "Microsoft.AspNetCore.App.Ref",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@ A simple ASP.NET Core MVC app for booking events. Users can browse events, make 
 
 1. Clone the repo
 2. Open `EventBooking.sln` in Visual Studio
-3. Make sure SQL Server LocalDB is installed
+3. Make sure MySQL is running (configured in appsettings.json)
 4. Apply migrations (see below)
 5. Hit F5 or `dotnet run` from the `EventBooking.Web` folder
 

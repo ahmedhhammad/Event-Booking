@@ -1,0 +1,16 @@
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\bin\Debug\net8.0\EventBooking.BLL.deps.json
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\bin\Debug\net8.0\EventBooking.BLL.dll
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\bin\Debug\net8.0\EventBooking.BLL.pdb
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\bin\Debug\net8.0\EventBooking.DAL.dll
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\bin\Debug\net8.0\EventBooking.DAL.pdb
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\EventBooking.BLL.csproj.AssemblyReference.cache
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\EventBooking.BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\EventBooking.BLL.AssemblyInfoInputs.cache
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\EventBooking.BLL.AssemblyInfo.cs
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\EventBooking.BLL.csproj.CoreCompileInputs.cache
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\EventBooking.BLL.sourcelink.json
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\EventBoo.CDC57F26.Up2Date
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\EventBooking.BLL.dll
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\refint\EventBooking.BLL.dll
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\EventBooking.BLL.pdb
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.BLL\obj\Debug\net8.0\ref\EventBooking.BLL.dll

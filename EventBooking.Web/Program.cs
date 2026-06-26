@@ -1,9 +1,11 @@
+using EventBooking.BLL.Services;
 using EventBooking.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<AuthService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 

@@ -136,3 +136,4 @@ C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\obj\Debug
 C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\obj\Debug\net8.0\EventBooking.Web.pdb
 C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\obj\Debug\net8.0\EventBooking.Web.genruntimeconfig.cache
 C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\obj\Debug\net8.0\ref\EventBooking.Web.dll
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\BCrypt-Net-Next.dll

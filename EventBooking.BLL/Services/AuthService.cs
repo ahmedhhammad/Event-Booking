@@ -33,5 +33,16 @@ namespace EventBooking.BLL.Services
 
             return (true, null);
         }
+
+        public User? Login(string email, string password)
+        {
+            var user = _db.Users
+                .FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+
+            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+                return null;
+
+            return user;
+        }
     }
 }

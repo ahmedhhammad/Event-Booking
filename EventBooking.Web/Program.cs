@@ -1,12 +1,21 @@
+using EventBooking.BLL.Mapping;
 using EventBooking.BLL.Services;
 using EventBooking.DAL.Data;
+using EventBooking.DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+// ── Existing services ──
 builder.Services.AddScoped<AuthService>();
+
+// ── Events feature ──
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddAutoMapper(cfg => { }, typeof(EventMappingProfile).Assembly);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 

@@ -1,3 +1,4 @@
 git rm -r --cached EventBooking.BLL/bin EventBooking.BLL/obj EventBooking.DAL/bin EventBooking.DAL/obj EventBooking.Web/bin EventBooking.Web/obj
 git commit -m "stop tracking build output"
 git push
+

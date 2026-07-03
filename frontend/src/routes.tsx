@@ -28,6 +28,12 @@ function GuestOnly({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+/** Perform a hard redirect to an MVC/server-side route outside the SPA */
+function RedirectToMvc({ path }: { path: string }) {
+  window.location.replace(path);
+  return null;
+}
+
 export function AppRoutes() {
   return (
     <BrowserRouter>
@@ -36,6 +42,8 @@ export function AppRoutes() {
           {/* Public */}
           <Route index element={<HomePage />} />
           <Route path="events" element={<EventsListingPage />} />
+          {/* Static segment MUST come before the dynamic :id route */}
+          <Route path="events/create" element={<RedirectToMvc path="/Events/Create" />} />
           <Route path="events/:id" element={<EventDetailsPage />} />
 
           {/* Auth */}

@@ -2,6 +2,15 @@
 
 This document summarizes the state of the EventBooking application, which has transitioned from a traditional MVC monolithic structure to a hybrid architecture featuring an API backend and a modern React/Vite Single Page Application (SPA).
 
+## Recent Bug Fixes
+
+### Organizer Hub — Route Conflict (Bug 1)
+- **Problem:** Navigating to `/Events/Create` showed "Event not found" because React Router's SPA matched the path `events/create` against the dynamic `events/:id` route, treating "create" as an event ID.
+- **Fix:** Added a static `events/create` route in `routes.tsx` **before** the `events/:id` route. This static route triggers a hard redirect (`window.location.replace`) to the MVC `/Events/Create` page, bypassing React Router entirely for server-side routes.
+
+### Organizer Hub — Non-functional Cards (Bug 2)
+- **Root cause confirmed:** All four cards already had `external: true` and rendered as `<a href>` anchor tags — they were technically clickable. The real issue causing "Event not found" errors was Bug 1 (route conflict). After fixing Bug 1, the Create Event card now correctly navigates to the MVC form. My Events, Ticket Categories, and Revenue & Attendance all correctly link to `/Organizer` (the MVC hub), where per-event action buttons (`🎫 Tickets`, `💰 Revenue`, `📊 Attendance`) require selecting a specific event first.
+
 ## Architecture & Layers
 
 The solution is divided into the following key components:

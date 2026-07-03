@@ -20,11 +20,11 @@ export function OrganizerDashboard() {
       href: '/Organizer', external: true, color: 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-200',
     },
     {
-      icon: Ticket, label: 'Ticket Categories', desc: 'Manage pricing and availability',
+      icon: Ticket, label: 'Ticket Categories', desc: 'Pick an event from My Events, then click 🎫 Tickets',
       href: '/Organizer', external: true, color: 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-200',
     },
     {
-      icon: BarChart2, label: 'Revenue & Attendance', desc: 'Track your event performance',
+      icon: BarChart2, label: 'Revenue & Attendance', desc: 'Pick an event from My Events, then click 💰 or 📊',
       href: '/Organizer', external: true, color: 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-200',
     },
   ];

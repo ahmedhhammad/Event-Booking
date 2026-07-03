@@ -48,6 +48,12 @@ namespace EventBooking.BLL.Services
             return _mapper.Map<EventDto>(ev);
         }
 
+        public async Task<IEnumerable<EventDto>> GetByOrganizerAsync(int organizerId)
+        {
+            var events = await _repo.GetByOrganizerAsync(organizerId);
+            return _mapper.Map<IEnumerable<EventDto>>(events);
+        }
+
         // ── Organizer cycle ──
         public async Task<EventDto> CreateEventAsync(CreateEventDto dto, int organizerId)
         {

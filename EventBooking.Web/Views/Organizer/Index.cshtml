@@ -1,6 +1,8 @@
+@model IEnumerable<EventBooking.BLL.DTOs.EventDto>
 @{
     ViewData["Title"] = "Organizer Hub";
     var name = User.Identity?.Name ?? "Organizer";
+    var events = Model.ToList();
 }
 
 <div class="container py-5">
@@ -15,14 +17,17 @@
                     </div>
                     <div>
                         <div class="fw-semibold">@name</div>
-                        <span class="badge bg-purple" style="background:#6c63ff;font-size:.65rem">Organizer</span>
+                        <span class="badge" style="background:#6c63ff;font-size:.65rem">Organizer</span>
                     </div>
                 </div>
                 <nav class="d-flex flex-column gap-2">
-                    <a asp-controller="Organizer" asp-action="Index" class="btn btn-outline-primary text-start fw-semibold">🏠 Hub</a>
-                    <a asp-controller="Events" asp-action="Create" class="btn text-white text-start fw-semibold"
+                    <a asp-controller="Organizer" asp-action="Index"
+                       class="btn btn-outline-primary text-start fw-semibold">🏠 Hub</a>
+                    <a asp-controller="Events" asp-action="Create"
+                       class="btn text-white text-start fw-semibold"
                        style="background:linear-gradient(135deg,#6c63ff,#48c6ef)">+ Create Event</a>
-                    <a asp-controller="Events" asp-action="Index" class="btn btn-light text-start">📋 All Events</a>
+                    <a asp-controller="Events" asp-action="Index"
+                       class="btn btn-light text-start">📋 All Events</a>
                     <hr />
                     <form asp-controller="Account" asp-action="Logout" method="post">
                         @Html.AntiForgeryToken()
@@ -34,35 +39,95 @@
 
         <!-- Content -->
         <div class="col-lg-9">
-            <h3 class="fw-bold mb-1">Welcome, @name.Split(' ')[0]! 🗓</h3>
-            <p class="text-muted mb-4">Manage your events, tickets, and revenue from here.</p>
-
-            <div class="row g-4">
-                @foreach (var card in new[] {
-                    new { Icon = "🎭", Title = "Create Event",     Desc = "Start a new Draft event",          Link = "/Events/Create",    Color = "#6c63ff" },
-                    new { Icon = "📋", Title = "My Events",        Desc = "Browse and manage your events",     Link = "/Events",           Color = "#3B82F6" },
-                    new { Icon = "🎫", Title = "Ticket Categories", Desc = "Set pricing and availability",     Link = "/Events",           Color = "#10b981" },
-                    new { Icon = "💰", Title = "Revenue",          Desc = "Track ticket sales revenue",        Link = "/Events",           Color = "#f59e0b" },
-                    new { Icon = "📊", Title = "Attendance",       Desc = "Monitor check-in and turnout",      Link = "/Events",           Color = "#ef4444" },
-                })
-                {
-                    <div class="col-md-4">
-                        <a href="@card.Link" class="text-decoration-none">
-                            <div class="card border-0 shadow-sm h-100 p-4 text-center"
-                                 style="border-radius:12px;transition:transform .2s;border-top:4px solid @card.Color!important"
-                                 onmouseover="this.style.transform='translateY(-4px)'"
-                                 onmouseout="this.style.transform='translateY(0)'">
-                                <div style="font-size:2.5rem">@card.Icon</div>
-                                <h6 class="fw-bold mt-2">@card.Title</h6>
-                                <p class="text-muted small mb-0">@card.Desc</p>
-                            </div>
-                        </a>
-                    </div>
-                }
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="fw-bold mb-0">Welcome, @name.Split(' ')[0]! 🗓</h3>
+                    <p class="text-muted mb-0">@events.Count event(s) — click an action to manage it</p>
+                </div>
+                <a asp-controller="Events" asp-action="Create"
+                   class="btn text-white fw-bold px-4"
+                   style="background:linear-gradient(135deg,#6c63ff,#48c6ef)">+ Create Event</a>
             </div>
 
+            @if (!events.Any())
+            {
+                <div class="card border-0 shadow-sm p-5 text-center" style="border-radius:12px">
+                    <div style="font-size:3rem" class="mb-3">🎭</div>
+                    <h5 class="fw-bold">No events yet</h5>
+                    <p class="text-muted">Create your first event to start selling tickets.</p>
+                    <a asp-controller="Events" asp-action="Create" class="btn btn-primary mt-2">Create Event</a>
+                </div>
+            }
+            else
+            {
+                <div class="card border-0 shadow-sm" style="border-radius:12px; overflow:hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead style="background:linear-gradient(135deg,#6c63ff,#48c6ef); color:#fff">
+                                <tr>
+                                    <th class="px-4 py-3">Event</th>
+                                    <th class="py-3">Date</th>
+                                    <th class="py-3">Status</th>
+                                    <th class="py-3 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var ev in events)
+                                {
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <div class="fw-semibold">@ev.Title</div>
+                                            <small class="text-muted">@ev.Category · $@ev.Price</small>
+                                        </td>
+                                        <td class="py-3 text-muted small align-middle">
+                                            @ev.Date.ToString("MMM d, yyyy")
+                                        </td>
+                                        <td class="py-3 align-middle">
+                                            <span class="badge @(ev.Status == "Published" ? "bg-success" : "bg-warning text-dark")">
+                                                @ev.Status
+                                            </span>
+                                        </td>
+                                        <td class="py-3 align-middle">
+                                            <div class="d-flex flex-wrap gap-1 justify-content-center">
+                                                <!-- Edit — existing route: GET /Events/Edit/{id} -->
+                                                <a asp-controller="Events" asp-action="Edit"
+                                                   asp-route-id="@ev.EventId"
+                                                   class="btn btn-sm btn-outline-primary" title="Edit event">
+                                                    ✏️ Edit
+                                                </a>
+
+                                                <!-- Ticket Categories — existing route: GET /Events/TicketCategories/{id} -->
+                                                <a asp-controller="Events" asp-action="TicketCategories"
+                                                   asp-route-id="@ev.EventId"
+                                                   class="btn btn-sm btn-outline-success" title="Manage ticket categories">
+                                                    🎫 Tickets
+                                                </a>
+
+                                                <!-- Revenue — existing route: GET /Events/Revenue/{id} -->
+                                                <a asp-controller="Events" asp-action="Revenue"
+                                                   asp-route-id="@ev.EventId"
+                                                   class="btn btn-sm btn-outline-warning" title="View revenue">
+                                                    💰 Revenue
+                                                </a>
+
+                                                <!-- Attendance — existing route: GET /Events/Attendance/{id} -->
+                                                <a asp-controller="Events" asp-action="Attendance"
+                                                   asp-route-id="@ev.EventId"
+                                                   class="btn btn-sm btn-outline-info" title="View attendance">
+                                                    📊 Attendance
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
             <div class="alert alert-info mt-4">
-                <strong>💡 Tip:</strong> After creating an event, go to <em>Ticket Categories</em> to set pricing — then <em>Publish</em> it for attendees to book.
+                <strong>💡 Tip:</strong> After creating an event, click <strong>🎫 Tickets</strong> to add pricing — then use <strong>Edit → 🚀 Publish</strong> for attendees to book.
             </div>
         </div>
     </div>

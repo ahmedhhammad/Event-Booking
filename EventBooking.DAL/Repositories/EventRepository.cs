@@ -61,6 +61,15 @@ namespace EventBooking.DAL.Repositories
             return await _db.Events.AsNoTracking().FirstOrDefaultAsync(e => e.EventId == id);
         }
 
+        public async Task<IEnumerable<Event>> GetByOrganizerAsync(int organizerId)
+        {
+            return await _db.Events
+                .AsNoTracking()
+                .Where(e => e.OrganizerId == organizerId)
+                .OrderByDescending(e => e.Date)
+                .ToListAsync();
+        }
+
         public async Task AddAsync(Event entity)
         {
             await _db.Events.AddAsync(entity);

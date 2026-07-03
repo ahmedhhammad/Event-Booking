@@ -2,6 +2,7 @@
 
 ## Current State
 - **4 roles working**: Guest (unauthenticated), Attendee, Organizer, Admin
+- **Organizer Hub fix**: Ticket Categories, Revenue, and Attendance links now use `asp-action` tag helpers with the correct event ID, loading real BLL data via `GetByOrganizerAsync`. The hub shows a per-event table instead of static hardcoded links.
 - Events listing (search/filter/sort/pagination) at `/Events` — public
 - Attendee: Browse events, Book tickets (`/Booking/Book/{id}`), My Bookings, Dashboard
 - Organizer: Create/Edit/Publish events, Ticket Categories, Revenue, Attendance (hub at `/Organizer`)

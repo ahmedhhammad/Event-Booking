@@ -14,6 +14,7 @@ namespace EventBooking.DAL.Repositories
         );
 
         Task<Event?> GetByIdAsync(int id);
+        Task<IEnumerable<Event>> GetByOrganizerAsync(int organizerId);
         Task AddAsync(Event entity);
         Task UpdateAsync(Event entity);
         Task DeleteAsync(int id);

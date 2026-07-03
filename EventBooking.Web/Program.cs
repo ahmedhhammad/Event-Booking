@@ -91,6 +91,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles(); // Added to serve index.html by default
 app.UseStaticFiles();
 app.UseCors("ReactDev");
 app.UseRouting();
@@ -99,9 +100,12 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller}/{action=Index}/{id?}"); // Removed '=Home'
 
 // Map API controllers (attribute-routed)
 app.MapControllers();
+
+// Fallback for SPA routing
+app.MapFallbackToFile("index.html");
 
 app.Run();

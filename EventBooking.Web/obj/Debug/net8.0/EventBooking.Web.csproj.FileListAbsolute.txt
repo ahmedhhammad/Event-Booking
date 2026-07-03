@@ -142,3 +142,4 @@ C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug
 C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
 C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\EventBooking.Web.staticwebassets.runtime.json

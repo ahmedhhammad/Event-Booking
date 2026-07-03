@@ -1,0 +1,121 @@
+@model EventBooking.BLL.DTOs.UpdateEventDto
+@{
+    ViewData["Title"] = "Edit Event";
+    var eventId = (int)ViewBag.EventId;
+    var status = (string)(ViewBag.EventStatus ?? "Draft");
+    bool isDraft = status == "Draft";
+    string ro = isDraft ? "" : "readonly";
+}
+
+<div class="container py-4" style="max-width:700px">
+
+    @if (TempData["Success"] != null)
+    { <div class="alert alert-success alert-dismissible fade show">@TempData["Success"]<button class="btn-close" data-bs-dismiss="alert"></button></div> }
+    @if (TempData["Error"] != null)
+    { <div class="alert alert-danger alert-dismissible fade show">@TempData["Error"]<button class="btn-close" data-bs-dismiss="alert"></button></div> }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header py-3" style="background:linear-gradient(135deg,#6c63ff,#48c6ef)">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="text-white mb-0 fw-bold">✏️ Edit Event</h4>
+                <span class="badge @(isDraft ? "bg-warning text-dark" : "bg-success") fs-6">@status</span>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit" asp-route-id="@eventId" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-semibold"></label>
+                    @if (isDraft)
+                    { <input asp-for="Title" class="form-control" required /> }
+                    else
+                    { <input asp-for="Title" class="form-control" readonly /> }
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-semibold"></label>
+                    @if (isDraft)
+                    { <textarea asp-for="Description" class="form-control" rows="3"></textarea> }
+                    else
+                    { <textarea asp-for="Description" class="form-control" rows="3" readonly></textarea> }
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Category" class="form-label fw-semibold"></label>
+                        @if (isDraft)
+                        {
+                            <select asp-for="Category" class="form-select">
+                                @foreach (var c in new[]{"Conference","Workshop","Concert","Sports","Festival","Other"})
+                                { <option value="@c">@c</option> }
+                            </select>
+                        }
+                        else
+                        { <input asp-for="Category" class="form-control" readonly /> }
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Venue" class="form-label fw-semibold"></label>
+                        @if (isDraft)
+                        { <input asp-for="Venue" class="form-control" /> }
+                        else
+                        { <input asp-for="Venue" class="form-control" readonly /> }
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label asp-for="Date" class="form-label fw-semibold"></label>
+                        @if (isDraft)
+                        { <input asp-for="Date" type="datetime-local" class="form-control" /> }
+                        else
+                        { <input asp-for="Date" type="datetime-local" class="form-control" readonly /> }
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Capacity" class="form-label fw-semibold"></label>
+                        @if (isDraft)
+                        { <input asp-for="Capacity" type="number" min="1" class="form-control" /> }
+                        else
+                        { <input asp-for="Capacity" type="number" class="form-control" readonly /> }
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Price" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            @if (isDraft)
+                            { <input asp-for="Price" type="number" step="0.01" min="0" class="form-control" /> }
+                            else
+                            { <input asp-for="Price" type="number" step="0.01" class="form-control" readonly /> }
+                        </div>
+                    </div>
+                </div>
+
+                @if (isDraft)
+                {
+                    <button type="submit" class="btn text-white fw-bold px-4"
+                            style="background:linear-gradient(135deg,#6c63ff,#48c6ef)">
+                        Save Changes
+                    </button>
+                }
+            </form>
+        </div>
+    </div>
+
+    <!-- Action links -->
+    <div class="d-flex gap-2 mt-3 flex-wrap">
+        <a asp-action="TicketCategories" asp-route-id="@eventId" class="btn btn-outline-primary">🎫 Ticket Categories</a>
+        <a asp-action="Revenue" asp-route-id="@eventId" class="btn btn-outline-success">💰 Revenue</a>
+        <a asp-action="Attendance" asp-route-id="@eventId" class="btn btn-outline-info">📊 Attendance</a>
+        @if (isDraft)
+        {
+            <form asp-action="Publish" asp-route-id="@eventId" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success fw-bold"
+                        onclick="return confirm('Publish this event? This cannot be undone.')">
+                    🚀 Publish Event
+                </button>
+            </form>
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary ms-auto">← Back to Events</a>
+    </div>
+</div>

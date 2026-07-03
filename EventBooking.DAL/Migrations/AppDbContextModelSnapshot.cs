@@ -79,8 +79,16 @@ namespace EventBooking.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("OrganizerId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -93,6 +101,8 @@ namespace EventBooking.DAL.Migrations
                         .HasColumnType("varchar(200)");
 
                     b.HasKey("EventId");
+
+                    b.HasIndex("OrganizerId");
 
                     b.ToTable("Events");
                 });
@@ -157,6 +167,67 @@ namespace EventBooking.DAL.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("EventBooking.DAL.Entities.Ticket", b =>
+                {
+                    b.Property<int>("TicketId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("TicketId"));
+
+                    b.Property<int>("AttendeeUserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("CheckedIn")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("PurchasedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("TicketCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TicketId");
+
+                    b.HasIndex("AttendeeUserId");
+
+                    b.HasIndex("TicketCategoryId");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("EventBooking.DAL.Entities.TicketCategory", b =>
+                {
+                    b.Property<int>("TicketCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("TicketCategoryId"));
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("QuantityAvailable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantitySold")
+                        .HasColumnType("int");
+
+                    b.HasKey("TicketCategoryId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("TicketCategories");
+                });
+
             modelBuilder.Entity("EventBooking.DAL.Entities.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -211,6 +282,16 @@ namespace EventBooking.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EventBooking.DAL.Entities.Event", b =>
+                {
+                    b.HasOne("EventBooking.DAL.Entities.User", "Organizer")
+                        .WithMany()
+                        .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Organizer");
+                });
+
             modelBuilder.Entity("EventBooking.DAL.Entities.Notification", b =>
                 {
                     b.HasOne("EventBooking.DAL.Entities.User", "User")
@@ -233,6 +314,36 @@ namespace EventBooking.DAL.Migrations
                     b.Navigation("Booking");
                 });
 
+            modelBuilder.Entity("EventBooking.DAL.Entities.Ticket", b =>
+                {
+                    b.HasOne("EventBooking.DAL.Entities.User", "Attendee")
+                        .WithMany()
+                        .HasForeignKey("AttendeeUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EventBooking.DAL.Entities.TicketCategory", "TicketCategory")
+                        .WithMany("Tickets")
+                        .HasForeignKey("TicketCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Attendee");
+
+                    b.Navigation("TicketCategory");
+                });
+
+            modelBuilder.Entity("EventBooking.DAL.Entities.TicketCategory", b =>
+                {
+                    b.HasOne("EventBooking.DAL.Entities.Event", "Event")
+                        .WithMany("TicketCategories")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("EventBooking.DAL.Entities.Booking", b =>
                 {
                     b.Navigation("Payment");
@@ -241,6 +352,13 @@ namespace EventBooking.DAL.Migrations
             modelBuilder.Entity("EventBooking.DAL.Entities.Event", b =>
                 {
                     b.Navigation("Bookings");
+
+                    b.Navigation("TicketCategories");
+                });
+
+            modelBuilder.Entity("EventBooking.DAL.Entities.TicketCategory", b =>
+                {
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("EventBooking.DAL.Entities.User", b =>

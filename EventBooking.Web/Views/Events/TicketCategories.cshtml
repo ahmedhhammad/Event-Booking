@@ -1,0 +1,93 @@
+@model IEnumerable<EventBooking.BLL.DTOs.TicketCategoryDto>
+@{
+    ViewData["Title"] = "Ticket Categories";
+    var eventId = (int)ViewBag.EventId;
+    var eventTitle = (string)(ViewBag.EventTitle ?? "");
+}
+
+<div class="container py-4" style="max-width:800px">
+
+    @if (TempData["Success"] != null)
+    { <div class="alert alert-success alert-dismissible fade show">@TempData["Success"]<button class="btn-close" data-bs-dismiss="alert"></button></div> }
+    @if (TempData["Error"] != null)
+    { <div class="alert alert-danger alert-dismissible fade show">@TempData["Error"]<button class="btn-close" data-bs-dismiss="alert"></button></div> }
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3 class="fw-bold mb-0">🎫 Ticket Categories</h3>
+            <small class="text-muted">@eventTitle</small>
+        </div>
+        <a asp-action="Edit" asp-route-id="@eventId" class="btn btn-outline-secondary btn-sm">← Back to Event</a>
+    </div>
+
+    <!-- Existing categories -->
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">No ticket categories yet. Add one below.</div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead style="background:linear-gradient(135deg,#6c63ff,#48c6ef); color:#fff">
+                        <tr>
+                            <th>Name</th><th>Price</th><th>Available</th><th>Sold</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tc in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@tc.Name</td>
+                                <td>@tc.Price.ToString("C")</td>
+                                <td>@tc.QuantityAvailable</td>
+                                <td>
+                                    <span class="badge bg-primary">@tc.QuantitySold sold</span>
+                                </td>
+                                <td>
+                                    <form asp-action="EditTicketCategory" asp-route-id="@tc.TicketCategoryId" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="eventId" value="@eventId" />
+                                        <input type="hidden" name="Name" value="@tc.Name" />
+                                        <input type="number" step="0.01" min="0" name="Price" value="@tc.Price" class="form-control form-control-sm d-inline-block w-auto" />
+                                        <input type="number" min="0" name="QuantityAvailable" value="@tc.QuantityAvailable" class="form-control form-control-sm d-inline-block w-auto" />
+                                        <button type="submit" class="btn btn-sm btn-outline-primary ms-1">Update</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    <!-- Add new category -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header fw-semibold" style="background:#f8f9ff">➕ Add Ticket Category</div>
+        <div class="card-body">
+            <form asp-action="AddTicketCategory" asp-route-id="@eventId" method="post">
+                @Html.AntiForgeryToken()
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Name</label>
+                        <input name="Name" class="form-control" placeholder="e.g. VIP, General" required />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Price ($)</label>
+                        <input name="Price" type="number" step="0.01" min="0" class="form-control" value="0" required />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Qty Available</label>
+                        <input name="QuantityAvailable" type="number" min="1" class="form-control" required />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn text-white w-100"
+                                style="background:linear-gradient(135deg,#6c63ff,#48c6ef)">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

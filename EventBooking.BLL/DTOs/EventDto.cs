@@ -10,5 +10,8 @@ namespace EventBooking.BLL.DTOs
         public DateTime Date { get; set; }
         public decimal Price { get; set; }
         public int Capacity { get; set; }
+        // ── Organizer cycle additions ──
+        public string Status { get; set; } = "Draft";
+        public int? OrganizerId { get; set; }
     }
 }

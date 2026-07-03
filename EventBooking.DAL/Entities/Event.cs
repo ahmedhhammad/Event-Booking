@@ -33,6 +33,15 @@ namespace EventBooking.DAL.Entities
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
+        // ── Organizer cycle additions (additive) ──
+        public EventStatus Status { get; set; } = EventStatus.Draft;
+
+        public int? OrganizerId { get; set; }
+
+        [ForeignKey(nameof(OrganizerId))]
+        public User? Organizer { get; set; }
+
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<TicketCategory> TicketCategories { get; set; } = new List<TicketCategory>();
     }
 }

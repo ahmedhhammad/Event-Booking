@@ -1,0 +1,43 @@
+@model EventBooking.BLL.DTOs.RevenueSummaryDto
+@{
+    ViewData["Title"] = "Revenue";
+}
+
+<div class="container py-4" style="max-width:700px">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0">💰 Revenue Summary</h3>
+        <a asp-action="Edit" asp-route-id="@Model.EventId" class="btn btn-outline-secondary btn-sm">← Back to Event</a>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead style="background:linear-gradient(135deg,#6c63ff,#48c6ef); color:#fff">
+                    <tr><th>Category</th><th>Price</th><th>Sold</th><th>Subtotal</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.Categories)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@line.Name</td>
+                            <td>@line.Price.ToString("C")</td>
+                            <td>@line.QuantitySold</td>
+                            <td class="fw-bold text-success">@line.Subtotal.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold">Total Revenue</td>
+                        <td class="fw-bold fs-5 text-success">@Model.TotalRevenue.ToString("C")</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    @if (!Model.Categories.Any())
+    {
+        <div class="alert alert-info">No ticket categories yet. Add them to start tracking revenue.</div>
+    }
+</div>

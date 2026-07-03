@@ -14,7 +14,12 @@ builder.Services.AddScoped<AuthService>();
 
 // ── Events feature ──
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<ITicketCategoryRepository, TicketCategoryRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ITicketCategoryService, TicketCategoryService>();
+builder.Services.AddScoped<IRevenueService, RevenueService>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddAutoMapper(cfg => { }, typeof(EventMappingProfile).Assembly);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

@@ -13,6 +13,10 @@ namespace EventBooking.DAL.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
+        // ── Organizer cycle ──
+        public DbSet<TicketCategory> TicketCategories { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -48,6 +52,42 @@ namespace EventBooking.DAL.Data
                 .WithMany(u => u.Notifications)
                 .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // ── Organizer cycle relationships ──
+
+            // Event (Organizer) — nullable FK, no cascade
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.Organizer)
+                .WithMany()
+                .HasForeignKey(e => e.OrganizerId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Event.Status default
+            modelBuilder.Entity<Event>()
+                .Property(e => e.Status)
+                .HasDefaultValue(EventStatus.Draft);
+
+            // Event 1 --- * TicketCategory
+            modelBuilder.Entity<TicketCategory>()
+                .HasOne(tc => tc.Event)
+                .WithMany(e => e.TicketCategories)
+                .HasForeignKey(tc => tc.EventId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // TicketCategory 1 --- * Ticket
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.TicketCategory)
+                .WithMany(tc => tc.Tickets)
+                .HasForeignKey(t => t.TicketCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // User 1 --- * Ticket (attendee)
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Attendee)
+                .WithMany()
+                .HasForeignKey(t => t.AttendeeUserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

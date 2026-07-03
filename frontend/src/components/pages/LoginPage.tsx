@@ -3,24 +3,24 @@ import { Ticket, Mail, Lock, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import type { ApiError } from '@/api/client';
+import { toast } from 'sonner';
 
 export function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
     try {
       await login(formData.email, formData.password);
+      toast.success('Successfully logged in!');
       navigate('/');
     } catch (err) {
       const apiErr = err as ApiError;
-      setError(apiErr?.message || 'Invalid email or password.');
+      toast.error(apiErr?.message || 'Invalid email or password.');
     } finally {
       setLoading(false);
     }
@@ -44,12 +44,6 @@ export function LoginPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-8">
-          {error && (
-            <div className="mb-4 flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">
-              <AlertCircle className="size-4 flex-shrink-0" />
-              {error}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>

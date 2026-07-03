@@ -143,3 +143,6 @@ C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug
 C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
 C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\EventBooking.Web.staticwebassets.runtime.json
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\spa.proxy.json
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\bin\Debug\net8.0\Microsoft.AspNetCore.SpaProxy.dll
+C:\Users\GM\Documents\event_booking_NET\Event-Booking\EventBooking.Web\obj\Debug\net8.0\spa.proxy.json

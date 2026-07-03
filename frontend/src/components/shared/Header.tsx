@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import { Ticket, Menu, X, LogOut, LayoutDashboard, Settings, UserCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { toast } from 'sonner';
 
 export function Header() {
   const location = useLocation();
@@ -13,6 +14,7 @@ export function Header() {
 
   const handleLogout = async () => {
     await logout();
+    toast.info('Logged out successfully');
     navigate('/');
   };
 

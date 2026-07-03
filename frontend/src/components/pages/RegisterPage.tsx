@@ -3,24 +3,24 @@ import { Ticket, User, Mail, Lock, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import type { ApiError } from '@/api/client';
+import { toast } from 'sonner';
 
 export function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
   const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'Attendee' });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
     try {
       await register(formData.name, formData.email, formData.password, formData.role);
+      toast.success('Account created successfully!');
       navigate(formData.role === 'Organizer' ? '/organizer' : '/dashboard');
     } catch (err) {
       const apiErr = err as ApiError;
-      setError(apiErr?.message || 'Registration failed. Please try again.');
+      toast.error(apiErr?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -44,12 +44,6 @@ export function RegisterPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-8">
-          {error && (
-            <div className="mb-4 flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">
-              <AlertCircle className="size-4 flex-shrink-0" />
-              {error}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>

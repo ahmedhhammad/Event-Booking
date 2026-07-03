@@ -10,17 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-// ── CORS: allow React dev server (port 5173) ──
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("ReactDev", policy => policy
-        .WithOrigins("http://localhost:5173")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials());
-});
-
-// ── Existing services ──
+// ── CORS: no longer needed since frontend runs on the same origin ──
 builder.Services.AddScoped<AuthService>();
 
 // ── Events feature ──
@@ -93,7 +83,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseDefaultFiles(); // Added to serve index.html by default
 app.UseStaticFiles();
-app.UseCors("ReactDev");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { bookingsApi, BookingDto } from '@/api/bookingsApi';
 import { useAuth } from '@/context/AuthContext';
 import type { ApiError } from '@/api/client';
+import { toast } from 'sonner';
 
 export function UserDashboard() {
   const { user } = useAuth();
@@ -28,9 +29,10 @@ export function UserDashboard() {
     try {
       await bookingsApi.cancelBooking(bookingId);
       setBookings(b => b.map(bk => bk.bookingId === bookingId ? { ...bk, status: 'Cancelled' } : bk));
+      toast.success('Booking cancelled successfully');
     } catch (err) {
       const e = err as ApiError;
-      alert(e.message || 'Could not cancel booking.');
+      toast.error(e.message || 'Could not cancel booking.');
     } finally {
       setCancellingId(null);
     }

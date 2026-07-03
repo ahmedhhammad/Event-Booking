@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { eventsApi, EventDto } from '@/api/eventsApi';
 import { bookingsApi } from '@/api/bookingsApi';
 import type { ApiError } from '@/api/client';
+import { toast } from 'sonner';
 
 export function BookingCheckoutPage() {
   const { id } = useParams<{ id: string }>();
@@ -12,7 +13,6 @@ export function BookingCheckoutPage() {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!id) return;
@@ -26,13 +26,13 @@ export function BookingCheckoutPage() {
     e.preventDefault();
     if (!event) return;
     setSubmitting(true);
-    setError('');
     try {
       const booking = await bookingsApi.createBooking(event.eventId, quantity);
+      toast.success('Booking confirmed!');
       navigate(`/dashboard?booked=${booking.bookingId}`);
     } catch (err) {
       const apiErr = err as ApiError;
-      setError(apiErr?.message || 'Booking failed. Please try again.');
+      toast.error(apiErr?.message || 'Booking failed. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -78,12 +78,6 @@ export function BookingCheckoutPage() {
         {/* Order Form */}
         <div className="bg-white rounded-xl shadow-sm p-6">
           <h3 className="font-semibold text-gray-900 mb-4">Order Details</h3>
-
-          {error && (
-            <div className="mb-4 flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">
-              <AlertCircle className="size-4 flex-shrink-0" /> {error}
-            </div>
-          )}
 
           <form onSubmit={handleBook} className="space-y-6">
             <div>

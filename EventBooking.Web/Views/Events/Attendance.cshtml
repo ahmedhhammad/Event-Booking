@@ -1,69 +1,71 @@
 @model EventBooking.BLL.DTOs.AttendanceSummaryDto
 @{
     ViewData["Title"] = "Attendance";
+    Layout = "_TailwindLayout";
     double pct = Model.TotalSold > 0 ? Math.Round((double)Model.TotalCheckedIn / Model.TotalSold * 100, 1) : 0;
 }
 
-<div class="container py-4" style="max-width:700px">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold mb-0">📊 Attendance Summary</h3>
-        <a asp-action="Edit" asp-route-id="@Model.EventId" class="btn btn-outline-secondary btn-sm">← Back to Event</a>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <h3 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <i data-lucide="users" class="size-6 text-purple-600"></i> Attendance Summary
+        </h3>
+        <a asp-action="Edit" asp-route-id="@Model.EventId" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+            <i data-lucide="arrow-left" class="size-4"></i> Back to Event
+        </a>
     </div>
 
     <!-- Summary cards -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm text-center p-3">
-                <div class="fs-2 fw-bold text-primary">@Model.TotalSold</div>
-                <small class="text-muted">Tickets Sold</small>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-bold text-blue-600 mb-1">@Model.TotalSold</div>
+            <div class="text-sm font-medium text-gray-500 uppercase tracking-wide">Tickets Sold</div>
         </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm text-center p-3">
-                <div class="fs-2 fw-bold text-success">@Model.TotalCheckedIn</div>
-                <small class="text-muted">Checked In</small>
-            </div>
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-bold text-green-600 mb-1">@Model.TotalCheckedIn</div>
+            <div class="text-sm font-medium text-gray-500 uppercase tracking-wide">Checked In</div>
         </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm text-center p-3">
-                <div class="fs-2 fw-bold text-info">@pct%</div>
-                <small class="text-muted">Check-in Rate</small>
-            </div>
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-bold text-purple-600 mb-1">@pct%</div>
+            <div class="text-sm font-medium text-gray-500 uppercase tracking-wide">Check-in Rate</div>
         </div>
     </div>
 
     <!-- Progress bar -->
-    <div class="mb-4">
-        <div class="progress" style="height:12px; border-radius:6px">
-            <div class="progress-bar bg-success"
-                 role="progressbar"
-                 style="width:@pct%"
-                 aria-valuenow="@pct" aria-valuemin="0" aria-valuemax="100">
-            </div>
+    <div class="mb-8">
+        <div class="w-full bg-gray-200 rounded-full h-3">
+            <div class="bg-green-500 h-3 rounded-full transition-all duration-500" style="width: @pct%"></div>
         </div>
     </div>
 
     <!-- Per-category breakdown -->
-    <div class="card shadow-sm border-0">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead style="background:linear-gradient(135deg,#6c63ff,#48c6ef); color:#fff">
-                    <tr><th>Category</th><th>Sold</th><th>Checked In</th><th>Rate</th></tr>
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden mb-8">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm whitespace-nowrap">
+                <thead class="bg-gray-50 border-b border-gray-200 text-gray-500">
+                    <tr>
+                        <th class="px-6 py-4 font-medium">Category</th>
+                        <th class="px-6 py-4 font-medium">Sold</th>
+                        <th class="px-6 py-4 font-medium">Checked In</th>
+                        <th class="px-6 py-4 font-medium min-w-[200px]">Rate</th>
+                    </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-200">
                     @foreach (var line in Model.Categories)
                     {
                         double catPct = line.QuantitySold > 0
                             ? Math.Round((double)line.CheckedIn / line.QuantitySold * 100, 1) : 0;
-                        <tr>
-                            <td class="fw-semibold">@line.Name</td>
-                            <td>@line.QuantitySold</td>
-                            <td>@line.CheckedIn</td>
-                            <td>
-                                <div class="progress" style="height:8px; border-radius:4px; min-width:80px">
-                                    <div class="progress-bar bg-info" style="width:@catPct%"></div>
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 font-medium text-gray-900">@line.Name</td>
+                            <td class="px-6 py-4 text-gray-600">@line.QuantitySold</td>
+                            <td class="px-6 py-4 text-gray-600">@line.CheckedIn</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-purple-500 h-2 rounded-full transition-all duration-500" style="width: @catPct%"></div>
+                                    </div>
+                                    <span class="text-xs text-gray-500 w-10 text-right">@catPct%</span>
                                 </div>
-                                <small class="text-muted">@catPct%</small>
                             </td>
                         </tr>
                     }
@@ -74,6 +76,11 @@
 
     @if (!Model.Categories.Any())
     {
-        <div class="alert alert-info mt-3">No ticket categories yet.</div>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0"><i data-lucide="info" class="h-5 w-5 text-blue-400"></i></div>
+                <div class="ml-3"><p class="text-sm text-blue-700">No ticket categories yet.</p></div>
+            </div>
+        </div>
     }
 </div>

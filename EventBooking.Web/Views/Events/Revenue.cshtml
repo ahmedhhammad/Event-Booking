@@ -1,43 +1,68 @@
 @model EventBooking.BLL.DTOs.RevenueSummaryDto
 @{
     ViewData["Title"] = "Revenue";
+    Layout = "_TailwindLayout";
 }
 
-<div class="container py-4" style="max-width:700px">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold mb-0">💰 Revenue Summary</h3>
-        <a asp-action="Edit" asp-route-id="@Model.EventId" class="btn btn-outline-secondary btn-sm">← Back to Event</a>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <h3 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <i data-lucide="circle-dollar-sign" class="size-6 text-amber-500"></i> Revenue Summary
+        </h3>
+        <a asp-action="Edit" asp-route-id="@Model.EventId" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+            <i data-lucide="arrow-left" class="size-4"></i> Back to Event
+        </a>
     </div>
 
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead style="background:linear-gradient(135deg,#6c63ff,#48c6ef); color:#fff">
-                    <tr><th>Category</th><th>Price</th><th>Sold</th><th>Subtotal</th></tr>
+    <div class="grid grid-cols-1 mb-8">
+        <div class="bg-gradient-to-r from-amber-500 to-orange-400 rounded-2xl shadow-sm p-6 text-white flex items-center justify-between">
+            <div>
+                <p class="text-amber-100 text-sm font-medium uppercase tracking-wider mb-1">Total Revenue</p>
+                <p class="text-4xl font-bold">@Model.TotalRevenue.ToString("C")</p>
+            </div>
+            <div class="p-4 bg-white/20 rounded-xl">
+                <i data-lucide="trending-up" class="size-8"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden mb-8">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm whitespace-nowrap">
+                <thead class="bg-gray-50 border-b border-gray-200 text-gray-500">
+                    <tr>
+                        <th class="px-6 py-4 font-medium">Category</th>
+                        <th class="px-6 py-4 font-medium">Price</th>
+                        <th class="px-6 py-4 font-medium">Sold</th>
+                        <th class="px-6 py-4 font-medium text-right">Subtotal</th>
+                    </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-200">
                     @foreach (var line in Model.Categories)
                     {
-                        <tr>
-                            <td class="fw-semibold">@line.Name</td>
-                            <td>@line.Price.ToString("C")</td>
-                            <td>@line.QuantitySold</td>
-                            <td class="fw-bold text-success">@line.Subtotal.ToString("C")</td>
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 font-medium text-gray-900">@line.Name</td>
+                            <td class="px-6 py-4 text-gray-600">@line.Price.ToString("C")</td>
+                            <td class="px-6 py-4 text-gray-600">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    @line.QuantitySold sold
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-right font-semibold text-green-600">@line.Subtotal.ToString("C")</td>
                         </tr>
                     }
                 </tbody>
-                <tfoot class="table-light">
-                    <tr>
-                        <td colspan="3" class="text-end fw-bold">Total Revenue</td>
-                        <td class="fw-bold fs-5 text-success">@Model.TotalRevenue.ToString("C")</td>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>
 
     @if (!Model.Categories.Any())
     {
-        <div class="alert alert-info">No ticket categories yet. Add them to start tracking revenue.</div>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0"><i data-lucide="info" class="h-5 w-5 text-blue-400"></i></div>
+                <div class="ml-3"><p class="text-sm text-blue-700">No ticket categories yet. Add them to start tracking revenue.</p></div>
+            </div>
+        </div>
     }
 </div>

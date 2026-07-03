@@ -1,134 +1,110 @@
 @model IEnumerable<EventBooking.BLL.DTOs.EventDto>
 @{
     ViewData["Title"] = "Organizer Hub";
+    Layout = "_TailwindLayout";
     var name = User.Identity?.Name ?? "Organizer";
     var events = Model.ToList();
 }
 
-<div class="container py-5">
-    <div class="row g-4">
-        <!-- Sidebar -->
-        <div class="col-lg-3">
-            <div class="card border-0 shadow-sm p-4" style="border-radius:12px; position:sticky; top:24px">
-                <div class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
-                         style="width:48px;height:48px;font-size:1.2rem;background:linear-gradient(135deg,#6c63ff,#48c6ef)">
-                        @name.Substring(0, 1).ToUpper()
-                    </div>
-                    <div>
-                        <div class="fw-semibold">@name</div>
-                        <span class="badge" style="background:#6c63ff;font-size:.65rem">Organizer</span>
-                    </div>
-                </div>
-                <nav class="d-flex flex-column gap-2">
-                    <a asp-controller="Organizer" asp-action="Index"
-                       class="btn btn-outline-primary text-start fw-semibold">🏠 Hub</a>
-                    <a asp-controller="Events" asp-action="Create"
-                       class="btn text-white text-start fw-semibold"
-                       style="background:linear-gradient(135deg,#6c63ff,#48c6ef)">+ Create Event</a>
-                    <a asp-controller="Events" asp-action="Index"
-                       class="btn btn-light text-start">📋 All Events</a>
-                    <hr />
-                    <form asp-controller="Account" asp-action="Logout" method="post">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-outline-danger w-100 text-start">🚪 Logout</button>
-                    </form>
-                </nav>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div class="flex items-center gap-4">
+            <div class="size-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-2xl">
+                @name.Substring(0, 1).ToUpper()
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Welcome back, @name.Split(' ')[0]! 👋</h1>
+                <p class="text-gray-500 text-sm">@events.Count event(s) — click an action to manage it</p>
             </div>
         </div>
+        <a asp-controller="Events" asp-action="Create" class="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors font-medium shadow-sm">
+            <i data-lucide="plus-circle" class="size-5"></i> Create Event
+        </a>
+    </div>
 
-        <!-- Content -->
-        <div class="col-lg-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h3 class="fw-bold mb-0">Welcome, @name.Split(' ')[0]! 🗓</h3>
-                    <p class="text-muted mb-0">@events.Count event(s) — click an action to manage it</p>
-                </div>
-                <a asp-controller="Events" asp-action="Create"
-                   class="btn text-white fw-bold px-4"
-                   style="background:linear-gradient(135deg,#6c63ff,#48c6ef)">+ Create Event</a>
+    @if (!events.Any())
+    {
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-12 text-center">
+            <div class="size-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="calendar" class="size-8"></i>
             </div>
-
-            @if (!events.Any())
-            {
-                <div class="card border-0 shadow-sm p-5 text-center" style="border-radius:12px">
-                    <div style="font-size:3rem" class="mb-3">🎭</div>
-                    <h5 class="fw-bold">No events yet</h5>
-                    <p class="text-muted">Create your first event to start selling tickets.</p>
-                    <a asp-controller="Events" asp-action="Create" class="btn btn-primary mt-2">Create Event</a>
-                </div>
-            }
-            else
-            {
-                <div class="card border-0 shadow-sm" style="border-radius:12px; overflow:hidden">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead style="background:linear-gradient(135deg,#6c63ff,#48c6ef); color:#fff">
-                                <tr>
-                                    <th class="px-4 py-3">Event</th>
-                                    <th class="py-3">Date</th>
-                                    <th class="py-3">Status</th>
-                                    <th class="py-3 text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var ev in events)
-                                {
-                                    <tr>
-                                        <td class="px-4 py-3">
-                                            <div class="fw-semibold">@ev.Title</div>
-                                            <small class="text-muted">@ev.Category · $@ev.Price</small>
-                                        </td>
-                                        <td class="py-3 text-muted small align-middle">
-                                            @ev.Date.ToString("MMM d, yyyy")
-                                        </td>
-                                        <td class="py-3 align-middle">
-                                            <span class="badge @(ev.Status == "Published" ? "bg-success" : "bg-warning text-dark")">
-                                                @ev.Status
-                                            </span>
-                                        </td>
-                                        <td class="py-3 align-middle">
-                                            <div class="d-flex flex-wrap gap-1 justify-content-center">
-                                                <!-- Edit — existing route: GET /Events/Edit/{id} -->
-                                                <a asp-controller="Events" asp-action="Edit"
-                                                   asp-route-id="@ev.EventId"
-                                                   class="btn btn-sm btn-outline-primary" title="Edit event">
-                                                    ✏️ Edit
-                                                </a>
-
-                                                <!-- Ticket Categories — existing route: GET /Events/TicketCategories/{id} -->
-                                                <a asp-controller="Events" asp-action="TicketCategories"
-                                                   asp-route-id="@ev.EventId"
-                                                   class="btn btn-sm btn-outline-success" title="Manage ticket categories">
-                                                    🎫 Tickets
-                                                </a>
-
-                                                <!-- Revenue — existing route: GET /Events/Revenue/{id} -->
-                                                <a asp-controller="Events" asp-action="Revenue"
-                                                   asp-route-id="@ev.EventId"
-                                                   class="btn btn-sm btn-outline-warning" title="View revenue">
-                                                    💰 Revenue
-                                                </a>
-
-                                                <!-- Attendance — existing route: GET /Events/Attendance/{id} -->
-                                                <a asp-controller="Events" asp-action="Attendance"
-                                                   asp-route-id="@ev.EventId"
-                                                   class="btn btn-sm btn-outline-info" title="View attendance">
-                                                    📊 Attendance
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            }
-
-            <div class="alert alert-info mt-4">
-                <strong>💡 Tip:</strong> After creating an event, click <strong>🎫 Tickets</strong> to add pricing — then use <strong>Edit → 🚀 Publish</strong> for attendees to book.
+            <h2 class="text-xl font-bold text-gray-900 mb-2">No events yet</h2>
+            <p class="text-gray-500 mb-6 max-w-md mx-auto">You haven't created any events. Create your first event to start selling tickets and tracking attendance.</p>
+            <a asp-controller="Events" asp-action="Create" class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors font-medium shadow-sm">
+                <i data-lucide="plus" class="size-5"></i> Create Your First Event
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                    <thead class="bg-gray-50 border-b border-gray-200 text-gray-500">
+                        <tr>
+                            <th class="px-6 py-4 font-medium">Event</th>
+                            <th class="px-6 py-4 font-medium">Date</th>
+                            <th class="px-6 py-4 font-medium">Status</th>
+                            <th class="px-6 py-4 font-medium text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach (var ev in events)
+                        {
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="font-medium text-gray-900">@ev.Title</div>
+                                    <div class="text-gray-500 text-xs mt-0.5">@ev.Category &middot; $@ev.Price</div>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">
+                                    @ev.Date.ToString("MMM d, yyyy")
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if (ev.Status == "Published")
+                                    {
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                            <span class="size-1.5 rounded-full bg-green-500"></span> Published
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+                                            <span class="size-1.5 rounded-full bg-amber-500"></span> @ev.Status
+                                        </span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@ev.EventId"
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors shadow-sm" title="Edit">
+                                            <i data-lucide="edit" class="size-3.5"></i> Edit
+                                        </a>
+                                        <a asp-controller="Events" asp-action="TicketCategories" asp-route-id="@ev.EventId"
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 hover:text-green-600 transition-colors shadow-sm" title="Tickets">
+                                            <i data-lucide="ticket" class="size-3.5"></i> Tickets
+                                        </a>
+                                        <a asp-controller="Events" asp-action="Revenue" asp-route-id="@ev.EventId"
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 hover:text-amber-600 transition-colors shadow-sm" title="Revenue">
+                                            <i data-lucide="circle-dollar-sign" class="size-3.5"></i> Revenue
+                                        </a>
+                                        <a asp-controller="Events" asp-action="Attendance" asp-route-id="@ev.EventId"
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 hover:text-purple-600 transition-colors shadow-sm" title="Attendance">
+                                            <i data-lucide="users" class="size-3.5"></i> Attendance
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
+        </div>
+    }
+
+    <div class="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-5 text-sm text-blue-700 flex gap-3 items-start">
+        <i data-lucide="lightbulb" class="size-5 flex-shrink-0 text-blue-600"></i>
+        <div>
+            <strong>Tip:</strong> After creating an event, click <strong>Tickets</strong> to add pricing — then use <strong>Edit &rarr; Publish</strong> for attendees to book.
         </div>
     </div>
 </div>

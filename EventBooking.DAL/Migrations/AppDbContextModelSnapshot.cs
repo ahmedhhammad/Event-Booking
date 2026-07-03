@@ -107,6 +107,36 @@ namespace EventBooking.DAL.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("EventBooking.DAL.Entities.Inquiry", b =>
+                {
+                    b.Property<int>("InquiryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("InquiryId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("InquiryId");
+
+                    b.ToTable("Inquiries");
+                });
+
             modelBuilder.Entity("EventBooking.DAL.Entities.Notification", b =>
                 {
                     b.Property<int>("NotificationId")

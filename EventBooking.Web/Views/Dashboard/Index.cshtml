@@ -1,0 +1,104 @@
+@model IEnumerable<EventBooking.BLL.DTOs.BookingDto>
+@{
+    ViewData["Title"] = "My Dashboard";
+    var name = User.Identity?.Name ?? "User";
+    var email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
+}
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm p-4" style="border-radius:12px; position:sticky; top:24px">
+                <div class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom">
+                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white fw-bold"
+                         style="width:48px; height:48px; font-size:1.2rem">
+                        @name.Substring(0, 1).ToUpper()
+                    </div>
+                    <div>
+                        <div class="fw-semibold">@name</div>
+                        <div class="text-muted small">@email</div>
+                        <span class="badge bg-primary" style="font-size:.65rem">Attendee</span>
+                    </div>
+                </div>
+                <nav class="d-flex flex-column gap-1">
+                    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-primary text-start fw-semibold">🎟 My Bookings</a>
+                    <a asp-controller="Booking" asp-action="MyBookings" class="btn btn-light text-start">📋 All Bookings</a>
+                    <a asp-controller="Events" asp-action="Index" class="btn btn-light text-start">🔍 Browse Events</a>
+                    <hr />
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger w-100 text-start">🚪 Logout</button>
+                    </form>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="col-lg-9">
+            <h3 class="fw-bold mb-1">Welcome back, @name.Split(' ')[0]! 👋</h3>
+            <p class="text-muted mb-4">Manage your event bookings and profile.</p>
+
+            <!-- Stats strip -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm text-center p-3" style="border-radius:10px">
+                        <div class="fs-3 fw-bold text-primary">@Model.Count()</div>
+                        <small class="text-muted">Total Bookings</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm text-center p-3" style="border-radius:10px">
+                        <div class="fs-3 fw-bold text-success">@Model.Count(b => b.Status == "Confirmed")</div>
+                        <small class="text-muted">Confirmed</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm text-center p-3" style="border-radius:10px">
+                        <div class="fs-3 fw-bold text-danger">@Model.Count(b => b.Status == "Cancelled")</div>
+                        <small class="text-muted">Cancelled</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent bookings -->
+            <div class="card border-0 shadow-sm" style="border-radius:12px">
+                <div class="card-header fw-semibold py-3 bg-white border-bottom">Upcoming & Recent Bookings</div>
+                <div class="card-body p-0">
+                    @if (!Model.Any())
+                    {
+                        <div class="p-5 text-center text-muted">
+                            No bookings yet. <a asp-controller="Events" asp-action="Index">Browse events →</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var b in Model.Take(5))
+                            {
+                                <div class="list-group-item px-4 py-3 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">@b.EventTitle</div>
+                                        <small class="text-muted">@b.EventDate.ToString("MMM d, yyyy") · @b.Venue · @b.Quantity ticket(s)</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold text-primary">$@b.TotalPrice.ToString("F2")</div>
+                                        <span class="badge @(b.Status == "Confirmed" ? "bg-success" : b.Status == "Cancelled" ? "bg-danger" : "bg-warning text-dark")">
+                                            @b.Status
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @if (Model.Count() > 5)
+                        {
+                            <div class="p-3 text-center">
+                                <a asp-controller="Booking" asp-action="MyBookings" class="text-primary small fw-semibold">View all @Model.Count() bookings →</a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

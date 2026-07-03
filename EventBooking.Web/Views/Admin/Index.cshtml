@@ -1,0 +1,95 @@
+@model EventBooking.BLL.DTOs.PlatformStatsDto
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="d-flex" style="min-height:calc(100vh - 62px)">
+    <!-- Dark Sidebar — matches AdminDashboard wireframe -->
+    <aside style="width:240px; background:#1e293b; flex-shrink:0; position:sticky; top:62px; height:calc(100vh - 62px); overflow-y:auto">
+        <div class="p-4">
+            <div class="text-white fw-bold mb-4 d-flex align-items-center gap-2">
+                <span style="font-size:1.4rem">⚙</span> Admin Panel
+            </div>
+            <nav class="d-flex flex-column gap-1">
+                @foreach (var item in new[] {
+                    new { Icon = "📊", Label = "Dashboard",     Action = "Index",   Active = ViewData["Title"]!.ToString() == "Admin Dashboard" },
+                    new { Icon = "🎭", Label = "Events",        Action = "Events",  Active = ViewData["Title"]!.ToString() == "Manage Events" },
+                    new { Icon = "👥", Label = "Users",         Action = "Users",   Active = ViewData["Title"]!.ToString() == "Manage Users" },
+                    new { Icon = "📈", Label = "Reports",       Action = "Reports", Active = ViewData["Title"]!.ToString() == "Platform Reports" },
+                })
+                {
+                    <a asp-controller="Admin" asp-action="@item.Action"
+                       class="d-flex align-items-center gap-2 px-3 py-2 rounded text-decoration-none fw-medium"
+                       style="color:@(item.Active ? "#fff" : "#94a3b8"); background:@(item.Active ? "#3B82F6" : "transparent");
+                              transition: background .15s">
+                        <span>@item.Icon</span> @item.Label
+                    </a>
+                }
+                <hr style="border-color:#334155; margin:1rem 0" />
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm w-100 text-start fw-medium"
+                            style="color:#f87171; background:transparent">🚪 Logout</button>
+                </form>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-grow-1 p-4" style="background:#f8fafc">
+        <h4 class="fw-bold mb-1">Dashboard Overview</h4>
+        <p class="text-muted mb-4">Platform-wide statistics</p>
+
+        <!-- Stats cards -->
+        <div class="row g-4 mb-5">
+            @foreach (var card in new[] {
+                new { Label = "Total Events",       Value = Model.TotalEvents.ToString(),                    Color = "#3B82F6", Icon = "🎭" },
+                new { Label = "Registered Users",   Value = Model.TotalUsers.ToString(),                     Color = "#10b981", Icon = "👥" },
+                new { Label = "Total Bookings",     Value = Model.TotalBookings.ToString(),                  Color = "#f59e0b", Icon = "🎟" },
+                new { Label = "Revenue (Tickets)",  Value = "$" + Model.TotalRevenue.ToString("N2"),         Color = "#6c63ff", Icon = "💰" },
+                new { Label = "Tickets Sold",       Value = Model.TotalTicketsSold.ToString(),               Color = "#ef4444", Icon = "🎫" },
+                new { Label = "Checked In",         Value = Model.TotalCheckedIn.ToString(),                 Color = "#14b8a6", Icon = "✅" },
+            })
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="card border-0 shadow-sm p-4" style="border-radius:12px; border-left:4px solid @card.Color!important">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small mb-1">@card.Label</div>
+                                <div class="fs-4 fw-bold">@card.Value</div>
+                            </div>
+                            <div style="font-size:2rem">@card.Icon</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Quick action links -->
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm p-4" style="border-radius:12px">
+                    <h6 class="fw-bold mb-3">Quick Actions</h6>
+                    <div class="d-flex flex-column gap-2">
+                        <a asp-controller="Admin" asp-action="Users" class="btn btn-outline-primary btn-sm text-start">👥 Manage Users</a>
+                        <a asp-controller="Admin" asp-action="Events" class="btn btn-outline-secondary btn-sm text-start">🎭 Manage Events</a>
+                        <a asp-controller="Admin" asp-action="Reports" class="btn btn-outline-info btn-sm text-start">📈 View Reports</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm p-4" style="border-radius:12px">
+                    <h6 class="fw-bold mb-3">Check-in Rate</h6>
+                    @{
+                        double rate = Model.TotalTicketsSold > 0
+                            ? Math.Round((double)Model.TotalCheckedIn / Model.TotalTicketsSold * 100, 1) : 0;
+                    }
+                    <div class="progress mb-2" style="height:14px; border-radius:7px">
+                        <div class="progress-bar bg-success" style="width:@rate%"></div>
+                    </div>
+                    <small class="text-muted">@rate% of sold tickets checked in (@Model.TotalCheckedIn / @Model.TotalTicketsSold)</small>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

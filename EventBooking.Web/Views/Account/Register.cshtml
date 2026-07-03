@@ -1,36 +1,55 @@
 @model EventBooking.Web.Models.RegisterViewModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Create Account";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <h2 class="mb-4">Create an Account</h2>
-
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<div class="container py-5" style="max-width:500px">
+    <div class="card border-0 shadow-sm" style="border-radius:16px; overflow:hidden">
+        <div class="card-header text-white py-4 text-center" style="background:linear-gradient(135deg,#1D4ED8,#3B82F6)">
+            <h3 class="mb-0 fw-bold">🎟 Create Account</h3>
+            <small class="opacity-75">Join thousands of event lovers</small>
+        </div>
+        <div class="card-body p-4">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none"></div>
 
             <form asp-action="Register" method="post">
+                @Html.AntiForgeryToken()
+
                 <div class="mb-3">
-                    <label asp-for="Name" class="form-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <label asp-for="Name" class="form-label fw-semibold">Full Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="John Doe" required />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <label asp-for="Email" class="form-label fw-semibold">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="you@example.com" required />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Password" class="form-label"></label>
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <label asp-for="Password" class="form-label fw-semibold">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Min. 6 characters" required />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Register</button>
+                <div class="mb-4">
+                    <label asp-for="Role" class="form-label fw-semibold">I want to</label>
+                    <select asp-for="Role" class="form-select">
+                        <option value="Attendee">🎟 Attend events (Attendee)</option>
+                        <option value="Organizer">🗓 Organize events (Organizer)</option>
+                    </select>
+                    <div class="form-text">You can always browse events without an account.</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 fw-bold py-2" style="background:linear-gradient(135deg,#1D4ED8,#3B82F6); border:none">
+                    Create Account
+                </button>
             </form>
+        </div>
+        <div class="card-footer text-center py-3 bg-light">
+            Already have an account?
+            <a asp-controller="Account" asp-action="Login" class="text-primary fw-semibold">Login</a>
         </div>
     </div>
 </div>

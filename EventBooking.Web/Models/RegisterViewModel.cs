@@ -15,5 +15,7 @@ namespace EventBooking.Web.Models
         [MinLength(6)]
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
+
+        public string Role { get; set; } = "Attendee";
     }
 }

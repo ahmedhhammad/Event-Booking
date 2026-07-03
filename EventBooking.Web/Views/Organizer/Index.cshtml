@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Organizer Hub";
+    var name = User.Identity?.Name ?? "Organizer";
+}
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm p-4" style="border-radius:12px; position:sticky; top:24px">
+                <div class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+                         style="width:48px;height:48px;font-size:1.2rem;background:linear-gradient(135deg,#6c63ff,#48c6ef)">
+                        @name.Substring(0, 1).ToUpper()
+                    </div>
+                    <div>
+                        <div class="fw-semibold">@name</div>
+                        <span class="badge bg-purple" style="background:#6c63ff;font-size:.65rem">Organizer</span>
+                    </div>
+                </div>
+                <nav class="d-flex flex-column gap-2">
+                    <a asp-controller="Organizer" asp-action="Index" class="btn btn-outline-primary text-start fw-semibold">🏠 Hub</a>
+                    <a asp-controller="Events" asp-action="Create" class="btn text-white text-start fw-semibold"
+                       style="background:linear-gradient(135deg,#6c63ff,#48c6ef)">+ Create Event</a>
+                    <a asp-controller="Events" asp-action="Index" class="btn btn-light text-start">📋 All Events</a>
+                    <hr />
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger w-100 text-start">🚪 Logout</button>
+                    </form>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="col-lg-9">
+            <h3 class="fw-bold mb-1">Welcome, @name.Split(' ')[0]! 🗓</h3>
+            <p class="text-muted mb-4">Manage your events, tickets, and revenue from here.</p>
+
+            <div class="row g-4">
+                @foreach (var card in new[] {
+                    new { Icon = "🎭", Title = "Create Event",     Desc = "Start a new Draft event",          Link = "/Events/Create",    Color = "#6c63ff" },
+                    new { Icon = "📋", Title = "My Events",        Desc = "Browse and manage your events",     Link = "/Events",           Color = "#3B82F6" },
+                    new { Icon = "🎫", Title = "Ticket Categories", Desc = "Set pricing and availability",     Link = "/Events",           Color = "#10b981" },
+                    new { Icon = "💰", Title = "Revenue",          Desc = "Track ticket sales revenue",        Link = "/Events",           Color = "#f59e0b" },
+                    new { Icon = "📊", Title = "Attendance",       Desc = "Monitor check-in and turnout",      Link = "/Events",           Color = "#ef4444" },
+                })
+                {
+                    <div class="col-md-4">
+                        <a href="@card.Link" class="text-decoration-none">
+                            <div class="card border-0 shadow-sm h-100 p-4 text-center"
+                                 style="border-radius:12px;transition:transform .2s;border-top:4px solid @card.Color!important"
+                                 onmouseover="this.style.transform='translateY(-4px)'"
+                                 onmouseout="this.style.transform='translateY(0)'">
+                                <div style="font-size:2.5rem">@card.Icon</div>
+                                <h6 class="fw-bold mt-2">@card.Title</h6>
+                                <p class="text-muted small mb-0">@card.Desc</p>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <strong>💡 Tip:</strong> After creating an event, go to <em>Ticket Categories</em> to set pricing — then <em>Publish</em> it for attendees to book.
+            </div>
+        </div>
+    </div>
+</div>

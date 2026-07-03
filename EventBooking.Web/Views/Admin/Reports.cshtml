@@ -1,0 +1,93 @@
+@model EventBooking.BLL.DTOs.PlatformStatsDto
+@{
+    ViewData["Title"] = "Platform Reports";
+    var inquiries = ViewBag.Inquiries as IEnumerable<EventBooking.BLL.DTOs.InquiryDto> ?? Enumerable.Empty<EventBooking.BLL.DTOs.InquiryDto>();
+    double checkInRate = Model.TotalTicketsSold > 0
+        ? Math.Round((double)Model.TotalCheckedIn / Model.TotalTicketsSold * 100, 1) : 0;
+}
+
+<div class="d-flex" style="min-height:calc(100vh - 62px)">
+    <aside style="width:240px; background:#1e293b; flex-shrink:0; position:sticky; top:62px; height:calc(100vh - 62px); overflow-y:auto">
+        <div class="p-4">
+            <div class="text-white fw-bold mb-4">⚙ Admin Panel</div>
+            <nav class="d-flex flex-column gap-1">
+                <a asp-controller="Admin" asp-action="Index"   class="d-flex align-items-center gap-2 px-3 py-2 rounded text-decoration-none fw-medium" style="color:#94a3b8">📊 Dashboard</a>
+                <a asp-controller="Admin" asp-action="Events"  class="d-flex align-items-center gap-2 px-3 py-2 rounded text-decoration-none fw-medium" style="color:#94a3b8">🎭 Events</a>
+                <a asp-controller="Admin" asp-action="Users"   class="d-flex align-items-center gap-2 px-3 py-2 rounded text-decoration-none fw-medium" style="color:#94a3b8">👥 Users</a>
+                <a asp-controller="Admin" asp-action="Reports" class="d-flex align-items-center gap-2 px-3 py-2 rounded text-decoration-none fw-medium" style="color:#fff; background:#3B82F6">📈 Reports</a>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="flex-grow-1 p-4" style="background:#f8fafc">
+        <h4 class="fw-bold mb-4">Platform Reports</h4>
+
+        <div class="row g-4 mb-4">
+            <!-- Revenue card -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm p-4" style="border-radius:12px">
+                    <h6 class="fw-bold text-muted mb-3">💰 Ticket Revenue</h6>
+                    <div class="display-6 fw-bold text-success mb-1">$@Model.TotalRevenue.ToString("N2")</div>
+                    <small class="text-muted">@Model.TotalTicketsSold tickets sold across all events</small>
+                </div>
+            </div>
+            <!-- Attendance card -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm p-4" style="border-radius:12px">
+                    <h6 class="fw-bold text-muted mb-3">📊 Attendance</h6>
+                    <div class="display-6 fw-bold text-primary mb-2">@Model.TotalCheckedIn <small class="fs-6 fw-normal text-muted">/ @Model.TotalTicketsSold</small></div>
+                    <div class="progress mb-1" style="height:10px; border-radius:5px">
+                        <div class="progress-bar bg-primary" style="width:@checkInRate%"></div>
+                    </div>
+                    <small class="text-muted">@checkInRate% check-in rate</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Platform totals -->
+        <div class="row g-3 mb-4">
+            @foreach (var stat in new[] {
+                new { Label = "Events",   Value = Model.TotalEvents.ToString()   },
+                new { Label = "Users",    Value = Model.TotalUsers.ToString()    },
+                new { Label = "Bookings", Value = Model.TotalBookings.ToString() },
+            })
+            {
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm text-center p-4" style="border-radius:10px">
+                        <div class="fs-2 fw-bold text-primary">@stat.Value</div>
+                        <small class="text-muted">@stat.Label</small>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Guest Inquiries -->
+        <div class="card border-0 shadow-sm" style="border-radius:12px">
+            <div class="card-header fw-semibold bg-white py-3 border-bottom">
+                ✉️ Guest Inquiries (@inquiries.Count())
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr><th class="px-4">Name</th><th>Email</th><th>Message</th><th>Submitted</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var inq in inquiries.Take(20))
+                        {
+                            <tr>
+                                <td class="px-4 fw-semibold">@inq.Name</td>
+                                <td class="text-muted">@inq.Email</td>
+                                <td style="max-width:300px"><span class="text-truncate d-block">@inq.Message</span></td>
+                                <td class="text-muted small">@inq.SubmittedAt.ToString("MMM d, HH:mm")</td>
+                            </tr>
+                        }
+                        @if (!inquiries.Any())
+                        {
+                            <tr><td colspan="4" class="text-center text-muted py-4">No inquiries yet.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>

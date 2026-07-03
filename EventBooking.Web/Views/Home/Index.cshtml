@@ -1,6 +1,114 @@
+@model IEnumerable<EventBooking.BLL.DTOs.EventDto>
 @{
-    ViewData["Title"] = "Event Booking";
+    ViewData["Title"] = "EventBooking — Discover Amazing Events";
 }
 
-<h1>Event Booking System</h1>
-<p>Coming soon.</p>
+<!-- Hero -->
+<section style="background:linear-gradient(135deg,#1D4ED8,#3B82F6); color:#fff; padding:5rem 0">
+    <div class="container text-center">
+        <h1 class="display-5 fw-bold mb-3">Discover Amazing Events Near You</h1>
+        <p class="lead mb-4 text-white-75">Find and book tickets for concerts, conferences, workshops, and more</p>
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <form asp-controller="Events" asp-action="Index" method="get" class="d-flex shadow-lg rounded overflow-hidden">
+                    <input type="text" name="SearchTerm" class="form-control form-control-lg border-0" placeholder="Search events by name, category..." />
+                    <button type="submit" class="btn btn-warning fw-bold px-4">Search</button>
+                </form>
+            </div>
+        </div>
+        @if (!User.Identity!.IsAuthenticated)
+        {
+            <div class="mt-4">
+                <a asp-controller="Account" asp-action="Register" class="btn btn-light fw-bold me-2">Get Started</a>
+                <a asp-controller="Events" asp-action="Index" class="btn btn-outline-light">Browse Events</a>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Featured Events -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-1">Upcoming Events</h2>
+                <p class="text-muted mb-0">Don't miss these exciting upcoming events</p>
+            </div>
+            <a asp-controller="Events" asp-action="Index" class="btn btn-outline-primary">View All →</a>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var ev in Model)
+                {
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm" style="border-radius:12px; overflow:hidden; transition:transform .2s"
+                             onmouseover="this.style.transform='translateY(-4px)'"
+                             onmouseout="this.style.transform='translateY(0)'">
+                            <div class="card-body p-4">
+                                <span class="badge bg-primary mb-2">@ev.Category</span>
+                                @if (ev.Status == "Published")
+                                { <span class="badge bg-success ms-1 mb-2">Published</span> }
+                                <h5 class="card-title fw-bold">@ev.Title</h5>
+                                <p class="text-muted small">📅 @ev.Date.ToString("MMM d, yyyy")</p>
+                                <p class="text-muted small">📍 @ev.Venue</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="fw-bold fs-5 text-primary">$@ev.Price</span>
+                                    @if (User.IsInRole("Attendee"))
+                                    {
+                                        <a asp-controller="Booking" asp-action="Book" asp-route-id="@ev.EventId" class="btn btn-primary btn-sm">Book Now</a>
+                                    }
+                                    else if (!User.Identity!.IsAuthenticated)
+                                    {
+                                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary btn-sm">Login to Book</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Events" asp-action="Index" class="btn btn-outline-secondary btn-sm">Details</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5 text-muted">No events yet. Check back soon!</div>
+        }
+    </div>
+</section>
+
+<!-- Stats -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row g-4 text-center">
+            @foreach (var stat in new[] {
+                new { Value = "1000+", Label = "Events" },
+                new { Value = "50K+",  Label = "Happy Customers" },
+                new { Value = "100+",  Label = "Cities" },
+                new { Value = "500+",  Label = "Organizers" }
+            })
+            {
+                <div class="col-6 col-md-3">
+                    <div class="display-5 fw-bold text-primary">@stat.Value</div>
+                    <div class="text-muted">@stat.Label</div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Inquiry CTA (Guest) -->
+@if (!User.Identity!.IsAuthenticated)
+{
+    <section class="py-5" style="background:#f0f9ff; border-top:3px solid #bae6fd">
+        <div class="container text-center">
+            <h3 class="fw-bold mb-2">Have a question?</h3>
+            <p class="text-muted mb-4">Send us a general inquiry — no account needed.</p>
+            <a asp-controller="Inquiry" asp-action="Create" class="btn btn-outline-primary px-5">Contact Us</a>
+        </div>
+    </section>
+}

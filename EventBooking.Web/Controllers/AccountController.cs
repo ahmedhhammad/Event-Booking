@@ -28,7 +28,7 @@ namespace EventBooking.Web.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var (success, error) = _authService.Register(model.Name, model.Email, model.Password);
+            var (success, error) = _authService.Register(model.Name, model.Email, model.Password, model.Role);
 
             if (!success)
             {
@@ -38,6 +38,9 @@ namespace EventBooking.Web.Controllers
 
             return RedirectToAction(nameof(Login));
         }
+
+        [HttpGet]
+        public IActionResult AccessDenied() => View();
 
         [HttpGet]
         public IActionResult Login()

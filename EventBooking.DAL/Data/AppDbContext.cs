@@ -17,6 +17,9 @@ namespace EventBooking.DAL.Data
         public DbSet<TicketCategory> TicketCategories { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
 
+        // ── Role-based additions ──
+        public DbSet<Inquiry> Inquiries { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

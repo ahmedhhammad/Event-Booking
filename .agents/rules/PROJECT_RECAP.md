@@ -1,33 +1,47 @@
 # Project Recap
 
 ## Current State
-- Events listing page works: search, filter, sort, pagination, TempData alerts (`/Events`)
-- Auth system works: Register, Login, Logout with cookie-based auth (Role claim in cookie)
-- Organizer cycle complete: Create/Edit/Publish events, Ticket Categories, Revenue, Attendance
-- Migration `AddOrganizerCycle` applied: `TicketCategories` + `Tickets` tables, `Status` + `OrganizerId` columns on `Events`
-- All existing endpoints and data shapes unchanged
+- **4 roles working**: Guest (unauthenticated), Attendee, Organizer, Admin
+- Events listing (search/filter/sort/pagination) at `/Events` — public
+- Attendee: Browse events, Book tickets (`/Booking/Book/{id}`), My Bookings, Dashboard
+- Organizer: Create/Edit/Publish events, Ticket Categories, Revenue, Attendance (hub at `/Organizer`)
+- Admin: Dashboard stats, Manage Users, Manage Events, Reports + Inquiries (at `/Admin`)
+- Guest: Browse events, Contact form at `/Inquiry/Create` (no account needed)
+- Auth: Register (Attendee or Organizer), Login, Logout, AccessDenied pages
+- Migration `AddInquiryTable` applied: `Inquiries` table added
 
 ## Architecture
-- `EventBooking.Web` — ASP.NET Core MVC; controllers call BLL services only
-- `EventBooking.BLL` — Services + DTOs + AutoMapper (v16); all business rules here
+- `EventBooking.Web` — ASP.NET Core MVC; Bootstrap 5; cookie auth
+- `EventBooking.BLL` — Services + DTOs + AutoMapper (v16)
 - `EventBooking.DAL` — EF Core + MySQL; repositories + migrations; `AppDbContext`
-- Auth: cookie-based (`CookieAuthenticationDefaults`); claims include `NameIdentifier` (UserId), `Name`, `Email`, `Role`
 
-## Recent Changes
-- Added `EventStatus` enum, `TicketCategory`, `Ticket` entities; extended `Event` with `Status`/`OrganizerId`
-- Added `ITicketCategoryRepository`, `ITicketRepository` and their EF Core implementations
-- Added `IEventService` methods: `CreateEventAsync`, `UpdateEventAsync`, `PublishEventAsync` (Draft→Published, irreversible)
-- Added `ITicketCategoryService`, `IRevenueService`, `IAttendanceService` with ownership enforcement in service layer
-- Extended `EventsController` with 8 organizer-only actions; 5 new Razor views (Create, Edit, TicketCategories, Revenue, Attendance)
+## Roles & Routes
+| Role        | Key Routes                                              |
+|-------------|----------------------------------------------------------|
+| Guest       | `/`, `/Events`, `/Events/Index`, `/Inquiry/Create`      |
+| Attendee    | `/Dashboard`, `/Booking/Book/{id}`, `/Booking/MyBookings` |
+| Organizer   | `/Organizer`, `/Events/Create`, `/Events/Edit/{id}`, `/Events/{id}/TicketCategories`, `/Events/{id}/Revenue`, `/Events/{id}/Attendance` |
+| Admin       | `/Admin`, `/Admin/Users`, `/Admin/Events`, `/Admin/Reports` |
+
+## Auth / Claims
+- Cookie: `ClaimTypes.NameIdentifier` (UserId), `ClaimTypes.Name`, `ClaimTypes.Email`, `ClaimTypes.Role`
+- Default role on register: **Attendee** (was "User" — existing rows need SQL update)
+- Admin cannot be set via UI; must be set directly in DB
+- `AccessDeniedPath` → `/Account/AccessDenied`
 
 ## Known Issues / TODO
-- `EditTicketCategory GET` redirects to `TicketCategories` (no dedicated `GetByIdAsync` on service yet)
-- No attendee ticket-purchase flow implemented (Tickets table exists, QuantitySold must be updated manually or via future purchase service)
-- No navbar links added yet — add manually in `_Layout.cshtml` for Organizer role
+- Existing users with `Role = 'User'` won't match `[Authorize(Roles = "Attendee")]`
+  → Run: `UPDATE Users SET Role = 'Attendee' WHERE Role = 'User'`
+- No password confirmation field on Register (add ConfirmPassword + Compare attribute if needed)
+- Booking does not deduct from `Event.Capacity` (future: add capacity check in BookingService)
+- Admin event delete not yet implemented (placeholder in AdminController.DeleteEvent)
+- No QR code generation for tickets (wireframe mentions it — future feature)
 
 ## Conventions
-- Namespaces: `EventBooking.*` (not `EBMS.*`)
-- Entity PKs: `EventId`, `UserId`, `BookingId`, `TicketCategoryId`, `TicketId`
-- `Event.Venue` (not Location); `Event.Price` is kept for listing display; per-ticket pricing is in `TicketCategory.Price`
-- Publish is irreversible: `Draft → Published` only
-- Organizer ownership enforced in service layer via `UnauthorizedAccessException`; controllers catch and return `Forbid()`
+- Namespaces: `EventBooking.*`
+- Entity PKs: `EventId`, `UserId`, `BookingId`, `TicketCategoryId`, `TicketId`, `InquiryId`
+- `Event.Venue` (not Location); `Event.Price` retained; ticket pricing via `TicketCategory.Price`
+- Publish is irreversible: `Draft → Published`
+- Organizer ownership enforced in service layer (throws `UnauthorizedAccessException`)
+- Attendee ownership on booking cancel enforced in `BookingService`
+- Admin role changes capped at Attendee/Organizer (cannot set Admin via UI)

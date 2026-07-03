@@ -1,0 +1,65 @@
+@model EventBooking.BLL.DTOs.EventDto
+@{
+    ViewData["Title"] = $"Book — {Model.Title}";
+}
+
+<div class="container py-5" style="max-width:680px">
+    @if (TempData["Error"] != null)
+    { <div class="alert alert-danger alert-dismissible fade show">@TempData["Error"]<button class="btn-close" data-bs-dismiss="alert"></button></div> }
+
+    <h3 class="fw-bold mb-4">🎟 Book Tickets</h3>
+
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:12px">
+        <div class="card-body p-4">
+            <span class="badge bg-primary mb-2">@Model.Category</span>
+            <h4 class="fw-bold">@Model.Title</h4>
+            <p class="text-muted">@Model.Description</p>
+            <div class="row g-3 mt-1 text-muted small">
+                <div class="col-md-4"><span class="fw-semibold">📅 Date:</span><br />@Model.Date.ToString("MMM d, yyyy h:mm tt")</div>
+                <div class="col-md-4"><span class="fw-semibold">📍 Venue:</span><br />@Model.Venue</div>
+                <div class="col-md-4"><span class="fw-semibold">💺 Capacity:</span><br />@Model.Capacity seats</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius:12px">
+        <div class="card-header fw-semibold py-3" style="background:#f8f9ff">Order Summary</div>
+        <div class="card-body p-4">
+            <form asp-action="Book" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="eventId" value="@Model.EventId" />
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Number of Tickets</label>
+                    <div class="input-group" style="max-width:180px">
+                        <span class="input-group-text">Qty</span>
+                        <input type="number" name="quantity" min="1" max="10" value="1" class="form-control" id="qty" oninput="updateTotal()" />
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded" style="background:#f0f9ff">
+                    <span class="text-muted">Price per ticket</span>
+                    <span class="fw-bold">$@Model.Price</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded bg-light">
+                    <span class="fw-semibold fs-5">Total</span>
+                    <span class="fw-bold fs-4 text-primary" id="total">$@Model.Price</span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 fw-bold py-2" style="background:linear-gradient(135deg,#1D4ED8,#3B82F6); border:none">
+                    Confirm Booking
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <a asp-controller="Events" asp-action="Index" class="btn btn-link mt-3 text-muted">← Back to Events</a>
+</div>
+
+<script>
+    const price = @Model.Price;
+    function updateTotal() {
+        const qty = parseInt(document.getElementById('qty').value) || 1;
+        document.getElementById('total').textContent = '$' + (price * qty).toFixed(2);
+    }
+</script>

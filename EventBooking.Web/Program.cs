@@ -2,12 +2,23 @@ using EventBooking.BLL.Mapping;
 using EventBooking.BLL.Services;
 using EventBooking.DAL.Data;
 using EventBooking.DAL.Repositories;
+using EventBooking.DAL.Seeding;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+// ── CORS: allow React dev server (port 5173) ──
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactDev", policy => policy
+        .WithOrigins("http://localhost:5173")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
+});
 
 // ── Existing services ──
 builder.Services.AddScoped<AuthService>();
@@ -44,9 +55,34 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login";
         options.AccessDeniedPath = "/Account/AccessDenied";
+        // Return 401 for API routes instead of redirecting
+        options.Events.OnRedirectToLogin = ctx =>
+        {
+            if (ctx.Request.Path.StartsWithSegments("/api"))
+                ctx.Response.StatusCode = 401;
+            else
+                ctx.Response.Redirect(ctx.RedirectUri);
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToAccessDenied = ctx =>
+        {
+            if (ctx.Request.Path.StartsWithSegments("/api"))
+                ctx.Response.StatusCode = 403;
+            else
+                ctx.Response.Redirect(ctx.RedirectUri);
+            return Task.CompletedTask;
+        };
     });
 
 var app = builder.Build();
+
+// ── Dev seeding ──
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await DataSeeder.SeedAsync(db);
+}
 
 if (!app.Environment.IsDevelopment())
 {
@@ -56,6 +92,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseCors("ReactDev");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -63,5 +100,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Map API controllers (attribute-routed)
+app.MapControllers();
 
 app.Run();

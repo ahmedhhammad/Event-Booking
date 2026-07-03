@@ -1,8 +1,8 @@
 ---
+trigger: always_on
 description: EBMS project structure and where things live
-globs:
-alwaysApply: true
 ---
+
 # EBMS Project Structure
 
 Event Booking Management System — N-Tier ASP.NET Core MVC solution with a separate React frontend.
@@ -25,7 +25,7 @@ EBMS/
 │   ├── Repositories/
 │   ├── Migrations/
 │   └── EBMSDbContext.cs
-└── frontend/            # React 18 + Vite client
+└── wireguide_event_book/            # React 18 + Vite client
     ├── src/
     │   ├── components/
     │   ├── pages/

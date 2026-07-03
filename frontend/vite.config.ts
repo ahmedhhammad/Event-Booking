@@ -18,6 +18,41 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/Events': {
+        target: 'https://localhost:7001',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/Organizer': {
+        target: 'https://localhost:7001',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/Account': {
+        target: 'https://localhost:7001',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/Admin': {
+        target: 'https://localhost:7001',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/Inquiry': {
+        target: 'https://localhost:7001',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/Dashboard': {
+        target: 'https://localhost:7001',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/Booking': {
+        target: 'https://localhost:7001',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
   build: {

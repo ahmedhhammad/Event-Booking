@@ -4,12 +4,10 @@ This document summarizes the state of the EventBooking application, which has tr
 
 ## Recent Bug Fixes
 
-### Organizer Hub — Route Conflict (Bug 1)
-- **Problem:** Navigating to `/Events/Create` showed "Event not found" because React Router's SPA matched the path `events/create` against the dynamic `events/:id` route, treating "create" as an event ID.
-- **Fix:** Added a static `events/create` route in `routes.tsx` **before** the `events/:id` route. This static route triggers a hard redirect (`window.location.replace`) to the MVC `/Events/Create` page, bypassing React Router entirely for server-side routes.
-
-### Organizer Hub — Non-functional Cards (Bug 2)
-- **Root cause confirmed:** All four cards already had `external: true` and rendered as `<a href>` anchor tags — they were technically clickable. The real issue causing "Event not found" errors was Bug 1 (route conflict). After fixing Bug 1, the Create Event card now correctly navigates to the MVC form. My Events, Ticket Categories, and Revenue & Attendance all correctly link to `/Organizer` (the MVC hub), where per-event action buttons (`🎫 Tickets`, `💰 Revenue`, `📊 Attendance`) require selecting a specific event first.
+### Organizer Hub — Route Conflict & Infinite Reload (Bug 1 & 2)
+- **Problem 1 (Infinite Reload):** Clicking "Create Event" from the Organizer Hub caused an infinite browser freeze. The previous attempt to fix a route conflict introduced a `RedirectToMvc` React component that called `window.location.replace()` *synchronously during the React render phase*. This is an anti-pattern that caused React to endlessly re-mount and trigger full-page reloads, completely breaking the page.
+- **Problem 2 (Cards Not Working):** The user reported the cards on the Organizer Hub "did nothing." In reality, they were already rendering as valid `<a href>` links doing full-page navigations directly to the MVC server. The reason they appeared broken was entirely due to the infinite loop caused by Problem 1 intercepting the navigation.
+- **The Actual Fix:** Completely removed the `RedirectToMvc` component and the `events/create` React route from `routes.tsx`. The cards in `OrganizerDashboard.tsx` already use `<a href="/Events/Create">` and `<a href="/Organizer">` which perform standard full-page navigations directly to the ASP.NET Core MVC controllers. Since the MVC app and React app share the same authentication cookie, the MVC `[Authorize(Roles = "Organizer")]` correctly recognizes the user and serves the Razor views without any React Router interference.
 
 ## Architecture & Layers
 

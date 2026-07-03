@@ -73,7 +73,7 @@
                         @if (isDraft)
                         {
                             <select asp-for="Category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-white">
-                                @foreach (var c in new[]{"Conference","Workshop","Concert","Sports","Festival","Other"})
+                                @foreach (var c in new[]{"Music", "Technology", "Food", "Art", "Sports", "Entertainment", "Business"})
                                 { <option value="@c">@c</option> }
                             </select>
                         }

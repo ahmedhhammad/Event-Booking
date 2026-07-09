@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EventBooking.DAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+06e100b3fe38fbfd8144fae1a085569921a14fcd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+73bb85cc9f511fbba9b2cc24a12dfea5f3e88441")]
 [assembly: System.Reflection.AssemblyProductAttribute("EventBooking.DAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EventBooking.DAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

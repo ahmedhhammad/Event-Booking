@@ -2,6 +2,7 @@
 
 This document summarizes the state of the EventBooking application, which has transitioned from a traditional MVC monolithic structure to a hybrid architecture featuring an API backend and a modern React/Vite Single Page Application (SPA).
 
+##lasdwwoasld
 ## Recent Bug Fixes
 
 ### Organizer Hub — Route Conflict & Infinite Reload (Bug 1 & 2)

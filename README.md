@@ -10,6 +10,7 @@ A simple ASP.NET Core MVC app for booking events. Users can browse events, make 
 4. Apply migrations (see below)
 5. Hit F5 or `dotnet run` from the `EventBooking.Web` folder
 
+## ....
 ## Applying migrations
 
 ```bash

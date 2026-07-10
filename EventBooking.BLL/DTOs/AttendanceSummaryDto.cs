@@ -12,6 +12,7 @@ namespace EventBooking.BLL.DTOs
     {
         public string Name { get; set; } = string.Empty;
         public int QuantitySold { get; set; }
+        public int QuantityRemaining { get; set; }
         public int CheckedIn { get; set; }
     }
 }

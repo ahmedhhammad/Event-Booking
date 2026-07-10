@@ -30,9 +30,10 @@ namespace EventBooking.Web.Controllers.Api
         {
             try
             {
-                var booking = await _bookingService.BookAsync(req.EventId, GetUserId(), req.Quantity);
+                var booking = await _bookingService.BookAsync(req.EventId, GetUserId(), req.LineItems);
                 return Ok(booking);
             }
+            catch (ArgumentException ex) { return BadRequest(new { error = ex.Message }); }
             catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); }
             catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
         }
@@ -50,5 +51,9 @@ namespace EventBooking.Web.Controllers.Api
         }
     }
 
-    public record CreateBookingRequest(int EventId, int Quantity);
+    public class CreateBookingRequest 
+    {
+        public int EventId { get; set; }
+        public List<EventBooking.BLL.DTOs.BookingLineItemRequest> LineItems { get; set; } = new();
+    }
 }

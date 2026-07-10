@@ -14,6 +14,11 @@ namespace EventBooking.DAL.Entities
         [Required]
         public int AttendeeUserId { get; set; }
 
+        /// <summary>
+        /// The booking this ticket belongs to. Nullable for legacy rows created before this field existed.
+        /// </summary>
+        public int? BookingId { get; set; }
+
         [Required]
         public DateTime PurchasedAt { get; set; } = DateTime.UtcNow;
 
@@ -25,5 +30,8 @@ namespace EventBooking.DAL.Entities
 
         [ForeignKey(nameof(AttendeeUserId))]
         public User Attendee { get; set; } = null!;
+
+        [ForeignKey(nameof(BookingId))]
+        public Booking? Booking { get; set; }
     }
 }

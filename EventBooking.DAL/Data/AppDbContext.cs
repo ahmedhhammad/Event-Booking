@@ -93,6 +93,13 @@ namespace EventBooking.DAL.Data
                 .HasForeignKey(t => t.AttendeeUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Booking 1 --- * Ticket
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Booking)
+                .WithMany(b => b.Tickets)
+                .HasForeignKey(t => t.BookingId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // AdminActionLog
             modelBuilder.Entity<AdminActionLog>(entity =>
             {

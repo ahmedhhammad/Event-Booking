@@ -28,7 +28,7 @@ namespace EventBooking.BLL.Services
                 throw new UnauthorizedAccessException("You do not own this event.");
 
             var categories = await _categoryRepo.GetByEventIdAsync(eventId);
-            var allTickets = await _ticketRepo.GetByEventIdAsync(eventId);
+            var allTickets = await _ticketRepo.GetConfirmedByEventIdAsync(eventId);
 
             var lines = categories.Select(tc =>
             {
@@ -37,6 +37,7 @@ namespace EventBooking.BLL.Services
                 {
                     Name = tc.Name,
                     QuantitySold = categoryTickets.Count,
+                    QuantityRemaining = tc.QuantityAvailable,
                     CheckedIn = categoryTickets.Count(t => t.CheckedIn)
                 };
             }).ToList();

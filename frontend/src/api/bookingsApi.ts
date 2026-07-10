@@ -1,5 +1,13 @@
 import { api } from './client';
 
+export interface BookingLineItemDto {
+  ticketCategoryId: number;
+  categoryName: string;
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
+}
+
 export interface BookingDto {
   bookingId: number;
   eventId: number;
@@ -10,13 +18,14 @@ export interface BookingDto {
   status: string;
   bookingDate: string;
   totalPrice: number;
+  lineItems: BookingLineItemDto[];
 }
 
 export const bookingsApi = {
   getMyBookings: () => api.get<BookingDto[]>('/api/bookings'),
 
-  createBooking: (eventId: number, quantity: number) =>
-    api.post<BookingDto>('/api/bookings', { eventId, quantity }),
+  createBooking: (eventId: number, lineItems: { ticketCategoryId: number; quantity: number }[]) =>
+    api.post<BookingDto>('/api/bookings', { eventId, lineItems }),
 
   cancelBooking: (bookingId: number) =>
     api.delete<void>(`/api/bookings/${bookingId}`),

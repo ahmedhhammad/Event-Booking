@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from 'react-router';
 import { Calendar, MapPin, ArrowLeft, Ticket, CheckCircle2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
-import { eventsApi, EventDto } from '@/api/eventsApi';
+import { eventsApi, EventDto, TicketCategoryDto } from '@/api/eventsApi';
 import { bookingsApi } from '@/api/bookingsApi';
 import { paymentsApi } from '@/api/paymentsApi';
 import { stripePromise } from '@/lib/stripe';
@@ -21,34 +21,80 @@ export function BookingCheckoutPage() {
   const navigate = useNavigate();
 
   const [event, setEvent] = useState<EventDto | null>(null);
+  const [categories, setCategories] = useState<TicketCategoryDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(1);
+  
+  // Mapping from TicketCategoryId -> Quantity selected
+  const [quantities, setQuantities] = useState<Record<number, number>>({});
+  
   const [submitting, setSubmitting] = useState(false);
   const [step, setStep] = useState<Step>({ id: 'select-quantity' });
 
   useEffect(() => {
     if (!id) return;
-    eventsApi
-      .getById(parseInt(id))
-      .then(setEvent)
+    const eventId = parseInt(id);
+    Promise.all([
+      eventsApi.getById(eventId),
+      eventsApi.getTicketCategories(eventId)
+    ])
+      .then(([eventRes, catRes]) => {
+        setEvent(eventRes);
+        setCategories(catRes);
+        // Initialize quantities to 0
+        const initialQuantities: Record<number, number> = {};
+        catRes.forEach(c => initialQuantities[c.ticketCategoryId] = 0);
+        // If there's only one category, default to 1 ticket
+        if (catRes.length === 1 && catRes[0].quantityAvailable > 0) {
+           initialQuantities[catRes[0].ticketCategoryId] = 1;
+        }
+        setQuantities(initialQuantities);
+      })
       .catch(() => navigate('/events'))
       .finally(() => setLoading(false));
   }, [id, navigate]);
+
+  const updateQuantity = (categoryId: number, delta: number, available: number) => {
+    setQuantities(prev => {
+      const current = prev[categoryId] || 0;
+      const next = Math.max(0, Math.min(available, current + delta));
+      return { ...prev, [categoryId]: next };
+    });
+  };
+
+  const total = useMemo(() => {
+    return categories.reduce((sum, cat) => {
+      const qty = quantities[cat.ticketCategoryId] || 0;
+      return sum + (cat.price * qty);
+    }, 0);
+  }, [quantities, categories]);
+
+  const totalTickets = useMemo(() => {
+    return Object.values(quantities).reduce((a, b) => a + b, 0);
+  }, [quantities]);
 
   // Step 1 → create booking (Pending) + create PaymentIntent → move to payment step
   const handleProceedToPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!event) return;
+    
+    if (totalTickets === 0) {
+      toast.error('Please select at least one ticket.');
+      return;
+    }
+
     setSubmitting(true);
     try {
+      const lineItems = Object.entries(quantities)
+        .filter(([_, qty]) => qty > 0)
+        .map(([catId, qty]) => ({ ticketCategoryId: parseInt(catId), quantity: qty }));
+
       // Create the booking (status = Pending)
-      const booking = await bookingsApi.createBooking(event.eventId, quantity);
+      const booking = await bookingsApi.createBooking(event.eventId, lineItems);
 
       // Create the Stripe PaymentIntent
-      const totalAmount = event.price * quantity;
       const { clientSecret } = await paymentsApi.createPaymentIntent(
         booking.bookingId,
-        totalAmount
+        total
       );
 
       setStep({ id: 'payment', bookingId: booking.bookingId, clientSecret });
@@ -84,8 +130,6 @@ export function BookingCheckoutPage() {
   }
 
   if (!event) return null;
-
-  const total = event.price * quantity;
 
   // ── Success screen ────────────────────────────────────────────────────────
   if (step.id === 'success') {
@@ -170,37 +214,45 @@ export function BookingCheckoutPage() {
         {/* ── Step 1: Quantity ── */}
         {step.id === 'select-quantity' && (
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Order Details</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Select Tickets</h3>
             <form onSubmit={handleProceedToPayment} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Number of Tickets
-                </label>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 text-lg font-bold"
-                  >
-                    −
-                  </button>
-                  <span className="text-xl font-semibold text-gray-900 w-8 text-center">
-                    {quantity}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(Math.min(10, quantity + 1))}
-                    className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 text-lg font-bold"
-                  >
-                    +
-                  </button>
-                </div>
+              <div className="space-y-4">
+                {categories.map((cat) => (
+                  <div key={cat.ticketCategoryId} className="flex items-center justify-between p-4 border border-gray-100 rounded-lg hover:border-gray-200 transition-colors">
+                    <div>
+                      <div className="font-medium text-gray-900">{cat.name}</div>
+                      <div className="text-sm text-gray-500">${cat.price} • {cat.quantityAvailable} available</div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4">
+                      <button
+                        type="button"
+                        onClick={() => updateQuantity(cat.ticketCategoryId, -1, cat.quantityAvailable)}
+                        disabled={!quantities[cat.ticketCategoryId]}
+                        className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 text-lg font-bold disabled:opacity-30 disabled:cursor-not-allowed"
+                      >
+                        −
+                      </button>
+                      <span className="text-xl font-semibold text-gray-900 w-8 text-center">
+                        {quantities[cat.ticketCategoryId] || 0}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => updateQuantity(cat.ticketCategoryId, 1, cat.quantityAvailable)}
+                        disabled={(quantities[cat.ticketCategoryId] || 0) >= cat.quantityAvailable}
+                        className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 text-lg font-bold disabled:opacity-30 disabled:cursor-not-allowed"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <div className="space-y-2 py-4 border-t border-b border-gray-100">
                 <div className="flex justify-between text-sm text-gray-600">
-                  <span>${event.price} × {quantity} ticket{quantity !== 1 ? 's' : ''}</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>Selected tickets</span>
+                  <span>{totalTickets} ticket{totalTickets !== 1 ? 's' : ''}</span>
                 </div>
                 <div className="flex justify-between font-semibold text-gray-900 text-lg">
                   <span>Total</span>
@@ -210,7 +262,7 @@ export function BookingCheckoutPage() {
 
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || totalTickets === 0}
                 className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold disabled:opacity-50"
               >
                 {submitting ? 'Preparing payment…' : `Continue to Payment — $${total.toFixed(2)}`}

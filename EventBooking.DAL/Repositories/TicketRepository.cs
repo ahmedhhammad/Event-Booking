@@ -30,6 +30,25 @@ namespace EventBooking.DAL.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Ticket>> GetByBookingIdAsync(int bookingId)
+        {
+            return await _db.Tickets
+                .AsNoTracking()
+                .Where(t => t.BookingId == bookingId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Ticket>> GetConfirmedByEventIdAsync(int eventId)
+        {
+            return await _db.Tickets
+                .AsNoTracking()
+                .Include(t => t.TicketCategory)
+                .Where(t => t.TicketCategory.EventId == eventId && 
+                            t.Booking != null && 
+                            t.Booking.Status == "Confirmed")
+                .ToListAsync();
+        }
+
         public async Task AddAsync(Ticket entity)
         {
             await _db.Tickets.AddAsync(entity);

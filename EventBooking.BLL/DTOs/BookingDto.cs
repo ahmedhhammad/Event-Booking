@@ -13,6 +13,8 @@ namespace EventBooking.BLL.DTOs
         public decimal TotalPrice { get; set; }
         /// <summary>Null if no payment attempt yet. Pending / Paid / Failed.</summary>
         public string? PaymentStatus { get; set; }
+
+        public List<BookingLineItemDto> LineItems { get; set; } = new();
     }
 }
 

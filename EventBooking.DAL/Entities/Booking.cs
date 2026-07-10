@@ -32,5 +32,7 @@ namespace EventBooking.DAL.Entities
 
         // one-to-one with Payment
         public Payment? Payment { get; set; }
+
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }

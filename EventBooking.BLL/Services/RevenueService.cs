@@ -7,11 +7,13 @@ namespace EventBooking.BLL.Services
     {
         private readonly IEventRepository _eventRepo;
         private readonly ITicketCategoryRepository _categoryRepo;
+        private readonly ITicketRepository _ticketRepo;
 
-        public RevenueService(IEventRepository eventRepo, ITicketCategoryRepository categoryRepo)
+        public RevenueService(IEventRepository eventRepo, ITicketCategoryRepository categoryRepo, ITicketRepository ticketRepo)
         {
             _eventRepo = eventRepo;
             _categoryRepo = categoryRepo;
+            _ticketRepo = ticketRepo;
         }
 
         public async Task<RevenueSummaryDto> GetRevenueAsync(int eventId, int organizerId)
@@ -23,13 +25,19 @@ namespace EventBooking.BLL.Services
                 throw new UnauthorizedAccessException("You do not own this event.");
 
             var categories = await _categoryRepo.GetByEventIdAsync(eventId);
+            var confirmedTickets = await _ticketRepo.GetConfirmedByEventIdAsync(eventId);
 
-            var lines = categories.Select(tc => new RevenueCategoryLineDto
-            {
-                Name = tc.Name,
-                Price = tc.Price,
-                QuantitySold = tc.QuantitySold,
-                Subtotal = tc.QuantitySold * tc.Price
+            var lines = categories.Select(tc => {
+                var categoryTickets = confirmedTickets.Where(t => t.TicketCategoryId == tc.TicketCategoryId).ToList();
+                int qtySold = categoryTickets.Count;
+
+                return new RevenueCategoryLineDto
+                {
+                    Name = tc.Name,
+                    Price = tc.Price,
+                    QuantitySold = qtySold,
+                    Subtotal = qtySold * tc.Price
+                };
             }).ToList();
 
             return new RevenueSummaryDto

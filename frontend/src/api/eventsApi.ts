@@ -29,6 +29,15 @@ export interface EventQuery {
   pageSize?: number;
 }
 
+export interface TicketCategoryDto {
+  ticketCategoryId: number;
+  eventId: number;
+  name: string;
+  price: number;
+  quantityAvailable: number;
+  quantitySold: number;
+}
+
 export const eventsApi = {
   getEvents: (query: EventQuery = {}) => {
     const params = new URLSearchParams();
@@ -42,4 +51,7 @@ export const eventsApi = {
   },
 
   getById: (id: number) => api.get<EventDto>(`/api/events/${id}`),
+
+  getTicketCategories: (eventId: number) => 
+    api.get<TicketCategoryDto[]>(`/api/events/${eventId}/ticket-categories`),
 };

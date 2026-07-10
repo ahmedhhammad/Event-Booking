@@ -39,7 +39,20 @@ namespace EventBooking.Web.Controllers
         {
             try
             {
-                var booking = await _bookingService.BookAsync(eventId, GetUserId(), quantity);
+                // Fallback for MVC view: pick the first category available
+                var categories = await (HttpContext.RequestServices.GetService(typeof(ITicketCategoryService)) as ITicketCategoryService)!.GetByEventAsync(eventId);
+                var firstCat = categories.FirstOrDefault() ?? throw new Exception("No ticket categories available.");
+
+                var items = new List<EventBooking.BLL.DTOs.BookingLineItemRequest>
+                {
+                    new EventBooking.BLL.DTOs.BookingLineItemRequest
+                    {
+                        TicketCategoryId = firstCat.TicketCategoryId,
+                        Quantity = quantity
+                    }
+                };
+
+                var booking = await _bookingService.BookAsync(eventId, GetUserId(), items);
                 TempData["Success"] = $"Booking confirmed! Booking #{booking.BookingId} for \"{booking.EventTitle}\".";
                 return RedirectToAction(nameof(MyBookings));
             }

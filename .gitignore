@@ -1,4 +1,16 @@
-git rm -r --cached EventBooking.BLL/bin EventBooking.BLL/obj EventBooking.DAL/bin EventBooking.DAL/obj EventBooking.Web/bin EventBooking.Web/obj
-git commit -m "stop tracking build output"
-git push
-node_modules
+@"
+# .NET build output
+bin/
+obj/
+*.user
+.vs/
+
+# Node/React
+node_modules/
+dist/
+.env
+
+# IDE
+.vscode/
+.idea/
+"@ | Out-File -Encoding utf8 .gitignore

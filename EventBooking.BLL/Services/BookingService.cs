@@ -32,7 +32,8 @@ namespace EventBooking.BLL.Services
                 UserId = userId,
                 Quantity = quantity,
                 BookingDate = DateTime.UtcNow,
-                Status = "Confirmed"
+                // Pending until Stripe payment_intent.succeeded webhook confirms it
+                Status = "Pending"
             };
 
             await _bookingRepo.AddAsync(booking);
@@ -47,7 +48,8 @@ namespace EventBooking.BLL.Services
                 Quantity = quantity,
                 Status = booking.Status,
                 BookingDate = booking.BookingDate,
-                TotalPrice = ev.Price * quantity
+                TotalPrice = ev.Price * quantity,
+                PaymentStatus = null // Payment not yet created
             };
         }
 
@@ -64,7 +66,8 @@ namespace EventBooking.BLL.Services
                 Quantity = b.Quantity,
                 Status = b.Status,
                 BookingDate = b.BookingDate,
-                TotalPrice = (b.Event?.Price ?? 0) * b.Quantity
+                TotalPrice = (b.Event?.Price ?? 0) * b.Quantity,
+                PaymentStatus = b.Payment?.Status
             });
         }
 

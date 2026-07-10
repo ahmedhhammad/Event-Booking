@@ -13,6 +13,7 @@ namespace EventBooking.DAL.Repositories
             => await _db.Bookings
                 .AsNoTracking()
                 .Include(b => b.Event)
+                .Include(b => b.Payment)
                 .Where(b => b.UserId == userId)
                 .OrderByDescending(b => b.BookingDate)
                 .ToListAsync();

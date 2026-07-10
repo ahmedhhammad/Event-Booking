@@ -13,19 +13,8 @@ An event booking platform built with ASP.NET Core MVC (N-Tier architecture) and 
 - **Payments:** Stripe
 - **Roles:** Guest / Attendee / Organizer / Admin / Owner
 
----
 
-## Getting Started
-
-### Prerequisites
-
-Make sure you have installed:
-- [.NET SDK](https://dotnet.microsoft.com/download) (check `global.json` or `.csproj` for exact version)
-- [Node.js](https://nodejs.org/) (v18+ recommended)
-- [MySQL Server](https://dev.mysql.com/downloads/) running locally
-- Git
-
-### 1. Clone the repo
+## Applying migrations
 
 ```bash
 git clone https://github.com/ahmedhhammad/Event-Booking.git

@@ -8,11 +8,19 @@ namespace EventBooking.BLL.Services
     {
         private readonly IBookingRepository _bookingRepo;
         private readonly IEventRepository _eventRepo;
+        private readonly ITicketRepository _ticketRepo;
+        private readonly ITicketCategoryRepository _ticketCategoryRepo;
 
-        public BookingService(IBookingRepository bookingRepo, IEventRepository eventRepo)
+        public BookingService(
+            IBookingRepository bookingRepo, 
+            IEventRepository eventRepo,
+            ITicketRepository ticketRepo,
+            ITicketCategoryRepository ticketCategoryRepo)
         {
             _bookingRepo = bookingRepo;
             _eventRepo = eventRepo;
+            _ticketRepo = ticketRepo;
+            _ticketCategoryRepo = ticketCategoryRepo;
         }
 
         public async Task<BookingDto> BookAsync(int eventId, int userId, int quantity)
@@ -26,6 +34,14 @@ namespace EventBooking.BLL.Services
             if (quantity < 1)
                 throw new ArgumentException("Quantity must be at least 1.");
 
+            // Get available ticket categories for the event
+            var categories = await _ticketCategoryRepo.GetByEventIdAsync(eventId);
+            var category = categories.FirstOrDefault() 
+                ?? throw new InvalidOperationException("No ticket categories available for this event.");
+
+            if (category.QuantityAvailable < quantity)
+                throw new InvalidOperationException("Not enough tickets available.");
+
             var booking = new Booking
             {
                 EventId = eventId,
@@ -36,6 +52,24 @@ namespace EventBooking.BLL.Services
             };
 
             await _bookingRepo.AddAsync(booking);
+
+            // Update ticket category counts
+            category.QuantityAvailable -= quantity;
+            category.QuantitySold += quantity;
+            await _ticketCategoryRepo.UpdateAsync(category);
+
+            // Generate individual tickets
+            for (int i = 0; i < quantity; i++)
+            {
+                var ticket = new Ticket
+                {
+                    TicketCategoryId = category.TicketCategoryId,
+                    AttendeeUserId = userId,
+                    PurchasedAt = DateTime.UtcNow,
+                    CheckedIn = false
+                };
+                await _ticketRepo.AddAsync(ticket);
+            }
 
             return new BookingDto
             {
@@ -81,6 +115,9 @@ namespace EventBooking.BLL.Services
 
             booking.Status = "Cancelled";
             await _bookingRepo.UpdateAsync(booking);
+            
+            // Note: In a full system, you would also free up the tickets and update the category counts here.
+            // For now, we are just marking the booking as Cancelled.
         }
     }
 }

@@ -91,6 +91,40 @@ namespace EventBooking.BLL.Services
         }
 
         /// <inheritdoc/>
+        public async Task RefundPaymentAsync(int bookingId)
+        {
+            var payment = await _db.Payments
+                .FirstOrDefaultAsync(p => p.BookingId == bookingId && p.Status == "Paid");
+
+            if (payment is null) return; // No paid payment — nothing to refund
+
+            if (!string.IsNullOrEmpty(payment.StripePaymentIntentId))
+            {
+                var refundService = new RefundService();
+                var refundOptions = new RefundCreateOptions
+                {
+                    PaymentIntent = payment.StripePaymentIntentId,
+                    // Omitting Amount = full refund
+                };
+                await refundService.CreateAsync(refundOptions);
+            }
+
+            // Mark payment as Refunded
+            payment.Status = "Refunded";
+            _db.Payments.Update(payment);
+
+            // Mark booking as Refunded
+            var booking = await _db.Bookings.FindAsync(bookingId);
+            if (booking is not null)
+            {
+                booking.Status = "Refunded";
+                _db.Bookings.Update(booking);
+            }
+
+            await _db.SaveChangesAsync();
+        }
+
+        /// <inheritdoc/>
         public async Task HandleWebhookAsync(string payload, string stripeSignature)
         {
             StripeEvent stripeEvent;

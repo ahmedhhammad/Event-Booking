@@ -13,7 +13,10 @@ namespace EventBooking.DAL.Repositories
             int pageSize
         );
 
+        /// <summary>Public-facing fetch — excludes Cancelled events.</summary>
         Task<Event?> GetByIdAsync(int id);
+        /// <summary>Organizer/Admin fetch — returns the event regardless of status.</summary>
+        Task<Event?> GetByIdUnrestrictedAsync(int id);
         Task<IEnumerable<Event>> GetByOrganizerAsync(int organizerId);
         Task AddAsync(Event entity);
         Task UpdateAsync(Event entity);

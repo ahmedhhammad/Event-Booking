@@ -61,10 +61,18 @@ namespace EventBooking.DAL.Repositories
 
         public async Task<Event?> GetByIdAsync(int id)
         {
-            // Exclude cancelled events from public detail view
+            // Public-facing: exclude cancelled events
             return await _db.Events
                 .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.EventId == id && e.Status != EventStatus.Cancelled);
+        }
+
+        public async Task<Event?> GetByIdUnrestrictedAsync(int id)
+        {
+            // Organizer/Admin-facing: returns any event regardless of status
+            return await _db.Events
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.EventId == id);
         }
 
         public async Task<IEnumerable<Event>> GetByOrganizerAsync(int organizerId)

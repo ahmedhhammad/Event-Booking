@@ -10,6 +10,13 @@ namespace EventBooking.BLL.Services
         Task<PaymentIntentResult> CreatePaymentIntentAsync(int bookingId, decimal amount);
 
         /// <summary>
+        /// Issues a Stripe refund for the payment linked to the given booking.
+        /// Marks the Payment.Status as "Refunded" and Booking.Status as "Refunded".
+        /// No-ops if the booking has no Paid payment.
+        /// </summary>
+        Task RefundPaymentAsync(int bookingId);
+
+        /// <summary>
         /// Handles a raw Stripe webhook payload.
         /// Verifies the signature and updates Booking + Payment status based on the event type.
         /// </summary>

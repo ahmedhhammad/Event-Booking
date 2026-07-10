@@ -87,7 +87,7 @@ namespace EventBooking.Web.Controllers
         {
             try
             {
-                var ev = await _eventService.GetByIdAsync(id);
+                var ev = await _eventService.GetByIdForOrganizerAsync(id, GetCurrentUserId());
                 var dto = new UpdateEventDto
                 {
                     Title = ev.Title, Description = ev.Description, Venue = ev.Venue,
@@ -134,6 +134,38 @@ namespace EventBooking.Web.Controllers
             return RedirectToAction(nameof(Edit), new { id });
         }
 
+        // POST /Events/5/Cancel
+        [Authorize(Roles = "Organizer")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            try
+            {
+                await _eventService.CancelEventAsync(id, GetCurrentUserId());
+                TempData["Success"] = "Event cancelled. Refunds have been initiated for confirmed bookings.";
+            }
+            catch (UnauthorizedAccessException) { return Forbid(); }
+            catch (InvalidOperationException ex) { TempData["Error"] = ex.Message; }
+            return RedirectToAction(nameof(Edit), new { id });
+        }
+
+        // POST /Events/5/Republish
+        [Authorize(Roles = "Organizer")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Republish(int id)
+        {
+            try
+            {
+                await _eventService.RepublishEventAsync(id, GetCurrentUserId());
+                TempData["Success"] = "Event moved to Draft. You can edit details and publish it again.";
+            }
+            catch (UnauthorizedAccessException) { return Forbid(); }
+            catch (InvalidOperationException ex) { TempData["Error"] = ex.Message; }
+            return RedirectToAction(nameof(Edit), new { id });
+        }
+
         // GET /Events/5/TicketCategories
         [Authorize(Roles = "Organizer")]
         [HttpGet]
@@ -141,7 +173,7 @@ namespace EventBooking.Web.Controllers
         {
             try
             {
-                var ev = await _eventService.GetByIdAsync(id);
+                var ev = await _eventService.GetByIdForOrganizerAsync(id, GetCurrentUserId());
                 var categories = await _ticketCategoryService.GetByEventAsync(id);
                 ViewBag.EventId = id;
                 ViewBag.EventTitle = ev.Title;
@@ -206,6 +238,9 @@ namespace EventBooking.Web.Controllers
         {
             try
             {
+                // Verify event ownership using the unrestricted method
+                await _eventService.GetByIdForOrganizerAsync(id, GetCurrentUserId());
+
                 var summary = await _revenueService.GetRevenueAsync(id, GetCurrentUserId());
                 return View(summary);
             }
@@ -220,6 +255,9 @@ namespace EventBooking.Web.Controllers
         {
             try
             {
+                // Verify event ownership using the unrestricted method
+                await _eventService.GetByIdForOrganizerAsync(id, GetCurrentUserId());
+
                 var summary = await _attendanceService.GetAttendanceAsync(id, GetCurrentUserId());
                 return View(summary);
             }

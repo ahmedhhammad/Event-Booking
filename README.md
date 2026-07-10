@@ -71,6 +71,24 @@ npm run dev
 | Organizer | `organizer@seed.dev` | `Seed@1234` |
 | Attendee | `attendee@seed.dev` | `Seed@1234` |
 
+## Stripe Test Cards
+
+Use any future expiry date, any 3-digit CVC, and any postal code.
+
+### ✅ Successful Payments
+| Card Number           | Brand      |
+|------------------------|------------|
+| 4242 4242 4242 4242    | Visa       |
+| 5555 5555 5555 4444    | Mastercard |
+
+### ❌ Declined Payments
+| Card Number           | Result                         |
+|------------------------|---------------------------------|
+| 4000 0000 0000 0002    | Card declined (generic)         |
+| 4000 0000 0000 9995    | Declined — insufficient funds   |
+
+Full reference: https://docs.stripe.com/testing
+
 ---
 
 ## 🏗️ Architecture

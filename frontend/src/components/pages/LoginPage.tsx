@@ -91,8 +91,7 @@ export function LoginPage() {
           </form>
 
           <div className="mt-4 p-3 bg-gray-50 rounded text-xs text-gray-500">
-            <strong>Seed accounts:</strong> attendee@seed.dev / organizer@seed.dev — password: <code>Seed@1234</code>
-            <strong>Seed accounts:</strong> admin@admin.com — password: <code>test1234</code>
+            <strong>Seed accounts:</strong> att@att.com / org@org.com / admin@admin.com — password: <code>test1234</code>
 
           </div>
         </div>

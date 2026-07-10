@@ -20,6 +20,8 @@ namespace EventBooking.BLL.Mapping
             // ── Role-based additions ──
             CreateMap<Inquiry, InquiryDto>().ReverseMap();
             CreateMap<User, UserAdminDto>().ReverseMap();
+            CreateMap<AdminActionLog, AdminActionLogDto>()
+                .ForMember(dest => dest.AdminName, opt => opt.MapFrom(src => src.AdminUser != null ? src.AdminUser.Name : "System"));
         }
 
         private static EventStatus ParseStatus(string status) =>

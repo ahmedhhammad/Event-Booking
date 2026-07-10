@@ -19,6 +19,7 @@ namespace EventBooking.DAL.Data
 
         // ── Role-based additions ──
         public DbSet<Inquiry> Inquiries { get; set; }
+        public DbSet<AdminActionLog> AdminActionLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -91,6 +92,16 @@ namespace EventBooking.DAL.Data
                 .WithMany()
                 .HasForeignKey(t => t.AttendeeUserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // AdminActionLog
+            modelBuilder.Entity<AdminActionLog>(entity =>
+            {
+                entity.HasKey(a => a.LogId);
+                entity.HasOne(a => a.AdminUser)
+                      .WithMany()
+                      .HasForeignKey(a => a.AdminUserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }

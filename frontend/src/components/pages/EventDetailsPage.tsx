@@ -137,6 +137,11 @@ export function EventDetailsPage() {
                     </Link>
                   </div>
                 )
+              ) : event.status === 'Cancelled' ? (
+                <div className="text-center py-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm font-medium">
+                  <span className="block text-base font-semibold mb-1">Event Cancelled</span>
+                  This event has been cancelled and is no longer available for booking.
+                </div>
               ) : (
                 <div className="text-center py-3 bg-yellow-50 text-yellow-700 rounded-lg text-sm font-medium">
                   This event is not yet published

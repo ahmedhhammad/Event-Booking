@@ -1,4 +1,3 @@
-@"
 # .NET build output
 bin/
 obj/
@@ -16,5 +15,6 @@ frontend/.env
 # IDE
 .vscode/
 .idea/
-"@ | Out-File -Encoding utf8 .gitignore
-node_modules
+
+# Local dev overrides (contain personal DB credentials — never commit)
+EventBooking.Web/appsettings.Development.json

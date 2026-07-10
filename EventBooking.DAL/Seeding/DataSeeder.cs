@@ -17,6 +17,20 @@ namespace EventBooking.DAL.Seeding
 
         public static async Task SeedAsync(AppDbContext db)
         {
+            // ── Seed admin user if absent ──
+            var admin = await db.Users.FirstOrDefaultAsync(u => u.Email == "admin@admin.com");
+            if (admin is null)
+            {
+                db.Users.Add(new User
+                {
+                    Name = "Admin",
+                    Email = "admin@admin.com",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("test1234"),
+                    Role = "Admin"
+                });
+                await db.SaveChangesAsync();
+            }
+
             // ── Seed organizer user if absent ──
             var organizer = await db.Users.FirstOrDefaultAsync(u => u.Email == "organizer@seed.dev");
             if (organizer is null)

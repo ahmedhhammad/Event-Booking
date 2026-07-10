@@ -66,12 +66,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-// ── Dev seeding ──
-if (app.Environment.IsDevelopment())
+// ── Auto-migrate + seed on startup ──
+// Applies any pending EF Core migrations automatically so new clones
+// don't need to run `dotnet ef database update` manually.
+using (var scope = app.Services.CreateScope())
 {
-    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await DataSeeder.SeedAsync(db);
+    await db.Database.MigrateAsync();          // creates DB + applies all migrations
+    await DataSeeder.SeedAsync(db);            // idempotent — safe to run every time
 }
 
 if (!app.Environment.IsDevelopment())

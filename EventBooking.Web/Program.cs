@@ -33,6 +33,9 @@ builder.Services.AddScoped<IUserAdminService, UserAdminService>();
 builder.Services.AddScoped<IPlatformStatsService, PlatformStatsService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 
+// ── Stripe payment service ──
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>

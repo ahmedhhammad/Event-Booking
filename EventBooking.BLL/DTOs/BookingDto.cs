@@ -11,5 +11,8 @@ namespace EventBooking.BLL.DTOs
         public string Status { get; set; } = string.Empty;
         public DateTime BookingDate { get; set; }
         public decimal TotalPrice { get; set; }
+        /// <summary>Null if no payment attempt yet. Pending / Paid / Failed.</summary>
+        public string? PaymentStatus { get; set; }
     }
 }
+

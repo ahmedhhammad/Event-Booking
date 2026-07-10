@@ -21,7 +21,10 @@ namespace EventBooking.DAL.Repositories
             int page,
             int pageSize)
         {
-            IQueryable<Event> query = _db.Events.AsNoTracking();
+            // Public listing: only show events that are Published (not Draft or Cancelled)
+            IQueryable<Event> query = _db.Events
+                .AsNoTracking()
+                .Where(e => e.Status == EventStatus.Published);
 
             // Search filter
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -58,7 +61,10 @@ namespace EventBooking.DAL.Repositories
 
         public async Task<Event?> GetByIdAsync(int id)
         {
-            return await _db.Events.AsNoTracking().FirstOrDefaultAsync(e => e.EventId == id);
+            // Exclude cancelled events from public detail view
+            return await _db.Events
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.EventId == id && e.Status != EventStatus.Cancelled);
         }
 
         public async Task<IEnumerable<Event>> GetByOrganizerAsync(int organizerId)

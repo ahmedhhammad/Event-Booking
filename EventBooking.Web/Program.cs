@@ -31,6 +31,7 @@ builder.Services.AddScoped<IInquiryService, InquiryService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IUserAdminService, UserAdminService>();
 builder.Services.AddScoped<IPlatformStatsService, PlatformStatsService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 

@@ -9,7 +9,7 @@ export function UserDashboard() {
 
   const handleCancelBooking = (bookingId: string) => {
     if (confirm('Are you sure you want to cancel this booking?')) {
-      setBookings(bookings.map(b => 
+      setBookings(bookings.map(b =>
         b.id === bookingId ? { ...b, status: 'cancelled' as const } : b
       ));
       alert('Booking cancelled successfully!');
@@ -43,11 +43,10 @@ export function UserDashboard() {
               <nav className="space-y-1">
                 <button
                   onClick={() => setActiveTab('profile')}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
-                    activeTab === 'profile'
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${activeTab === 'profile'
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <User className="size-5" />
                   <span className="font-medium">Profile</span>
@@ -55,11 +54,10 @@ export function UserDashboard() {
 
                 <button
                   onClick={() => setActiveTab('bookings')}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
-                    activeTab === 'bookings'
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${activeTab === 'bookings'
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <Ticket className="size-5" />
                   <span className="font-medium">My Bookings</span>
@@ -67,11 +65,10 @@ export function UserDashboard() {
 
                 <button
                   onClick={() => setActiveTab('notifications')}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
-                    activeTab === 'notifications'
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${activeTab === 'notifications'
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <Bell className="size-5" />
                   <span className="font-medium">Notifications</span>
@@ -138,7 +135,7 @@ export function UserDashboard() {
                     </label>
                     <input
                       type="tel"
-                      defaultValue="+1 (555) 123-4567"
+                      defaultValue="+20 0155555555"
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -214,8 +211,8 @@ export function UserDashboard() {
                                         booking.status === 'confirmed'
                                           ? 'bg-green-100 text-green-700'
                                           : booking.status === 'pending'
-                                          ? 'bg-yellow-100 text-yellow-700'
-                                          : 'bg-red-100 text-red-700'
+                                            ? 'bg-yellow-100 text-yellow-700'
+                                            : 'bg-red-100 text-red-700'
                                       }
                                     >
                                       {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}

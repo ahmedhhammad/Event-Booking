@@ -129,7 +129,7 @@ export function BookingCheckoutPage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="+1 (555) 123-4567"
+                    placeholder="+20 0155555555"
                   />
                 </div>
               </form>
@@ -234,11 +234,11 @@ export function BookingCheckoutPage() {
                   <div className="flex items-start gap-2">
                     <Calendar className="size-4 mt-0.5 flex-shrink-0" />
                     <span>
-                      {new Date(event.date).toLocaleDateString('en-US', { 
+                      {new Date(event.date).toLocaleDateString('en-US', {
                         weekday: 'long',
-                        month: 'long', 
-                        day: 'numeric', 
-                        year: 'numeric' 
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
                       })} at {event.time}
                     </span>
                   </div>

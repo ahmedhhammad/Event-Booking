@@ -176,9 +176,9 @@ export function HomePage() {
               <Link to="/register" className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
                 Create Free Account
               </Link>
-              <a href="/Inquiry/Create" className="border border-blue-600 text-blue-600 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors font-medium">
+              <Link to="/contact" className="border border-blue-600 text-blue-600 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors font-medium">
                 Contact Us
-              </a>
+              </Link>
             </div>
           </div>
         </section>

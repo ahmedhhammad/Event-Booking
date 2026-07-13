@@ -10,6 +10,7 @@ import { RegisterPage } from '@/components/pages/RegisterPage';
 import { UserDashboard } from '@/components/pages/UserDashboard';
 import { AdminDashboard } from '@/components/pages/AdminDashboard';
 import { OrganizerDashboard } from '@/components/pages/OrganizerDashboard';
+import { ContactPage } from '@/components/pages/ContactPage';
 
 /** Redirect to / while auth is loading, then gate by authenticated + role */
 function RequireAuth({ role, children }: { role?: string; children: React.ReactNode }) {
@@ -38,6 +39,7 @@ export function AppRoutes() {
           <Route index element={<HomePage />} />
           <Route path="events" element={<EventsListingPage />} />
           <Route path="events/:id" element={<EventDetailsPage />} />
+          <Route path="contact" element={<ContactPage />} />
 
           {/* Auth */}
           <Route path="login"    element={<GuestOnly><LoginPage /></GuestOnly>} />

@@ -21,6 +21,7 @@ export function Header() {
   const publicLinks = [
     { path: '/', label: 'Home' },
     { path: '/events', label: 'Events' },
+    { path: '/contact', label: 'Contact' },
   ];
 
   return (
@@ -48,10 +49,6 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
-            {/* Contact — links to the MVC inquiry page */}
-            <a href="/Inquiry/Create" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-              Contact
-            </a>
           </nav>
 
           {/* Right side */}

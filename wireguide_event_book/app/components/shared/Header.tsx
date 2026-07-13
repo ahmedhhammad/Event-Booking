@@ -13,6 +13,7 @@ export function Header() {
   const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/events', label: 'Events' },
+    { path: '/contact', label: 'Contact' },
     { path: '/login', label: 'Login' },
     { path: '/register', label: 'Register' },
   ];

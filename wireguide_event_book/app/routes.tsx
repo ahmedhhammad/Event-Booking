@@ -8,6 +8,7 @@ import { LoginPage } from "./components/pages/LoginPage";
 import { RegisterPage } from "./components/pages/RegisterPage";
 import { UserDashboard } from "./components/pages/UserDashboard";
 import { AdminDashboard } from "./components/pages/AdminDashboard";
+import { ContactPage } from "./components/pages/ContactPage";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
       { path: "booking/:id", Component: BookingCheckoutPage },
       { path: "login", Component: LoginPage },
       { path: "register", Component: RegisterPage },
+      { path: "contact", Component: ContactPage },
       { path: "dashboard", Component: UserDashboard },
       { path: "admin", Component: AdminDashboard },
     ],

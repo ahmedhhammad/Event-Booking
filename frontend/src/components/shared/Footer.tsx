@@ -23,6 +23,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link to="/" className="hover:text-white transition-colors">Home</Link></li>
               <li><Link to="/events" className="hover:text-white transition-colors">Events</Link></li>
+              <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
               <li><Link to="/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
               <li><Link to="/login" className="hover:text-white transition-colors">Login</Link></li>
             </ul>
@@ -44,8 +45,8 @@ export function Footer() {
             <h3 className="text-white font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2"><Mail className="size-4 mt-0.5 flex-shrink-0" /><span>support@eventbook.com</span></li>
-              <li className="flex items-start gap-2"><Phone className="size-4 mt-0.5 flex-shrink-0" /><span>+1 (555) 123-4567</span></li>
-              <li className="flex items-start gap-2"><MapPin className="size-4 mt-0.5 flex-shrink-0" /><span>123 Event Street, New York, NY 10001</span></li>
+              <li className="flex items-start gap-2"><Phone className="size-4 mt-0.5 flex-shrink-0" /><span>+20 0155555555</span></li>
+              <li className="flex items-start gap-2"><MapPin className="size-4 mt-0.5 flex-shrink-0" /><span>55 Mohammed Mazhar Street , Cairo</span></li>
             </ul>
             <div className="flex gap-4 mt-4">
               <a href="#" className="hover:text-white transition-colors"><Facebook className="size-5" /></a>

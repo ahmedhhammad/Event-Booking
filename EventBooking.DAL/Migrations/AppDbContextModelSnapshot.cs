@@ -109,6 +109,10 @@ namespace EventBooking.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
                     b.Property<int?>("OrganizerId")
                         .HasColumnType("int");
 

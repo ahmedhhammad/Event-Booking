@@ -64,7 +64,7 @@ export function EventsListingPage() {
   const EventCard = ({ ev }: { ev: EventDto }) => (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
       <div className="relative h-48 bg-gray-200">
-        <ImageWithFallback src={CATEGORY_IMAGES[ev.category] ?? ''} alt={ev.title} className="w-full h-full object-cover" />
+        <ImageWithFallback src={ev.imageUrl || (CATEGORY_IMAGES[ev.category] ?? '')} alt={ev.title} className="w-full h-full object-cover" />
         <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">${ev.price}</div>
       </div>
       <div className="p-5">

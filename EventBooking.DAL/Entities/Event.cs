@@ -41,6 +41,9 @@ namespace EventBooking.DAL.Entities
         [ForeignKey(nameof(OrganizerId))]
         public User? Organizer { get; set; }
 
+        [MaxLength(500)]
+        public string? ImageUrl { get; set; }
+
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
         public ICollection<TicketCategory> TicketCategories { get; set; } = new List<TicketCategory>();
     }

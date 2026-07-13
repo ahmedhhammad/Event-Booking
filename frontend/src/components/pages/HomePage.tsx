@@ -17,6 +17,9 @@ const CATEGORY_IMAGES: Record<string, string> = {
 };
 
 function eventImage(ev: EventDto) {
+  if (ev.imageUrl) {
+    return ev.imageUrl;
+  }
   return CATEGORY_IMAGES[ev.category] ?? 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800';
 }
 

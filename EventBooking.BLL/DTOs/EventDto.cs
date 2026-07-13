@@ -13,5 +13,6 @@ namespace EventBooking.BLL.DTOs
         // ── Organizer cycle additions ──
         public string Status { get; set; } = "Draft";
         public int? OrganizerId { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

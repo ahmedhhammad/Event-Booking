@@ -11,6 +11,7 @@ export interface EventDto {
   capacity: number;
   status: string;
   organizerId: number;
+  imageUrl?: string;
 }
 
 export interface PagedResult<T> {

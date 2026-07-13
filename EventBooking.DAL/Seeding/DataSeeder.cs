@@ -61,99 +61,95 @@ namespace EventBooking.DAL.Seeding
                 await db.SaveChangesAsync();
             }
 
-            // ── Skip if events already seeded ──
-            if (await db.Events.AnyAsync()) return;
+            // ── Skip if new image events already seeded ──
+            if (await db.Events.AnyAsync(e => e.ImageUrl != null)) return;
 
             var events = new List<Event>
             {
                 new() {
-                    Title = "Summer Music Festival 2026",
-                    Category = "Music",
-                    Date = new DateTime(2026, 6, 15, 18, 0, 0, DateTimeKind.Utc),
-                    Venue = "Central Park Arena",
-                    Price = 89m,
-                    Capacity = 2000,
-                    Description = "Join us for an unforgettable evening of live music featuring top artists from around the world. Experience amazing performances across multiple stages with food trucks and craft beverages.",
-                    Status = EventStatus.Published,
-                    OrganizerId = organizer.UserId,
+                    Title = "Andrei Stratu Event", Category = "Entertainment",
+                    Date = new DateTime(2026, 8, 15, 18, 0, 0, DateTimeKind.Utc), Venue = "Central Park Arena",
+                    Price = 89m, Capacity = 2000, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/andrei-stratu-kcJsQ3PJrYU-unsplash.jpg",
+                    Description = "Join us for an unforgettable evening of live entertainment featuring top performers. Experience amazing shows and grab some craft beverages."
                 },
                 new() {
-                    Title = "Tech Innovation Summit",
-                    Category = "Technology",
-                    Date = new DateTime(2026, 4, 22, 9, 0, 0, DateTimeKind.Utc),
-                    Venue = "Convention Center",
-                    Price = 299m,
-                    Capacity = 500,
-                    Description = "Discover the latest in technology and innovation. Network with industry leaders, attend workshops, and explore cutting-edge products from leading tech companies.",
-                    Status = EventStatus.Published,
-                    OrganizerId = organizer.UserId,
+                    Title = "Campaign Creators Summit", Category = "Business",
+                    Date = new DateTime(2026, 9, 22, 9, 0, 0, DateTimeKind.Utc), Venue = "Convention Center",
+                    Price = 299m, Capacity = 500, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/campaign-creators-gMsnXqILjp4-unsplash.jpg",
+                    Description = "Discover the latest in business strategies and marketing. Network with industry leaders, attend workshops, and explore cutting-edge products."
                 },
                 new() {
-                    Title = "Food & Wine Festival",
-                    Category = "Food",
-                    Date = new DateTime(2026, 5, 10, 12, 0, 0, DateTimeKind.Utc),
-                    Venue = "Riverside Plaza",
-                    Price = 65m,
-                    Capacity = 800,
-                    Description = "Indulge in culinary delights from world-renowned chefs. Sample exquisite wines, gourmet dishes, and artisanal foods in a beautiful outdoor setting.",
-                    Status = EventStatus.Published,
-                    OrganizerId = organizer.UserId,
+                    Title = "Edwin Andrade Exhibition", Category = "Art",
+                    Date = new DateTime(2026, 8, 10, 12, 0, 0, DateTimeKind.Utc), Venue = "Riverside Plaza",
+                    Price = 65m, Capacity = 800, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/edwin-andrade-4V1dC_eoCwg-unsplash.jpg",
+                    Description = "Celebrate contemporary art with an exclusive gallery exhibition. Sample exquisite art pieces in a beautiful setting."
                 },
                 new() {
-                    Title = "Art Gallery Opening",
-                    Category = "Art",
-                    Date = new DateTime(2026, 4, 5, 19, 0, 0, DateTimeKind.Utc),
-                    Venue = "Modern Art Museum",
-                    Price = 45m,
-                    Capacity = 150,
-                    Description = "Celebrate contemporary art with an exclusive gallery opening featuring emerging and established artists. Enjoy cocktails, live music, and guided tours.",
-                    Status = EventStatus.Published,
-                    OrganizerId = organizer.UserId,
+                    Title = "Evangeline Shaw Concert", Category = "Music",
+                    Date = new DateTime(2026, 7, 25, 19, 0, 0, DateTimeKind.Utc), Venue = "Modern Art Museum",
+                    Price = 45m, Capacity = 150, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/evangeline-shaw-nwLTVwb7DbU-unsplash.jpg",
+                    Description = "Experience an intimate evening of live acoustic music. Enjoy cocktails, live music, and guided tours."
                 },
                 new() {
-                    Title = "Marathon Championship",
-                    Category = "Sports",
-                    Date = new DateTime(2026, 7, 20, 7, 0, 0, DateTimeKind.Utc),
-                    Venue = "City Center",
-                    Price = 55m,
-                    Capacity = 5000,
-                    Description = "Watch elite runners compete in this prestigious marathon event. Cheer on participants as they race through scenic city routes.",
-                    Status = EventStatus.Published,
-                    OrganizerId = organizer.UserId,
+                    Title = "Headway Tech Conference", Category = "Technology",
+                    Date = new DateTime(2026, 10, 20, 7, 0, 0, DateTimeKind.Utc), Venue = "City Center",
+                    Price = 55m, Capacity = 5000, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/headway-F2KRf_QfCqw-unsplash.jpg",
+                    Description = "Learn from top tech leaders and developers. Attend keynote speeches, panel discussions, and explore new tech trends."
                 },
                 new() {
-                    Title = "Comedy Night Live",
-                    Category = "Entertainment",
-                    Date = new DateTime(2026, 4, 18, 20, 0, 0, DateTimeKind.Utc),
-                    Venue = "Laugh Factory",
-                    Price = 39m,
-                    Capacity = 200,
-                    Description = "An evening of non-stop laughter with some of the funniest comedians in the country. Get ready for stand-up, improv, and interactive comedy.",
-                    Status = EventStatus.Published,
-                    OrganizerId = organizer.UserId,
+                    Title = "Jaime Lopes Workshop", Category = "Art",
+                    Date = new DateTime(2026, 9, 18, 20, 0, 0, DateTimeKind.Utc), Venue = "Laugh Factory",
+                    Price = 39m, Capacity = 200, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/jaime-lopes-0RDBOAdnbWM-unsplash.jpg",
+                    Description = "An evening of interactive art sessions. Get ready for hands-on experience and creative techniques."
                 },
                 new() {
-                    Title = "Business Leadership Conference",
-                    Category = "Business",
-                    Date = new DateTime(2026, 5, 28, 8, 30, 0, DateTimeKind.Utc),
-                    Venue = "Grand Hotel",
-                    Price = 399m,
-                    Capacity = 300,
-                    Description = "Learn from top business leaders and entrepreneurs. Attend keynote speeches, panel discussions, and networking sessions designed to elevate your business acumen.",
-                    Status = EventStatus.Published,
-                    OrganizerId = organizer.UserId,
+                    Title = "Kevin Gonzalez Show", Category = "Entertainment",
+                    Date = new DateTime(2026, 8, 28, 8, 30, 0, DateTimeKind.Utc), Venue = "Grand Hotel",
+                    Price = 399m, Capacity = 300, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/kevin-gonzalez--NXNaE9lu6w-unsplash.jpg",
+                    Description = "Experience a thrilling live performance. Perfect for audiences looking for top-notch entertainment."
                 },
                 new() {
-                    Title = "Jazz & Blues Night",
-                    Category = "Music",
-                    Date = new DateTime(2026, 6, 2, 19, 30, 0, DateTimeKind.Utc),
-                    Venue = "Blue Note Club",
-                    Price = 55m,
-                    Capacity = 120,
-                    Description = "Experience smooth jazz and soulful blues performed by talented musicians in an intimate club setting. A perfect night for music lovers.",
-                    Status = EventStatus.Published,
-                    OrganizerId = organizer.UserId,
+                    Title = "Miguel Henriques Fest", Category = "Food",
+                    Date = new DateTime(2026, 9, 2, 19, 30, 0, DateTimeKind.Utc), Venue = "Blue Note Club",
+                    Price = 55m, Capacity = 120, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/miguel-henriques-RfiBK6Y_upQ-unsplash.jpg",
+                    Description = "Indulge in culinary delights from local chefs. A perfect night for food lovers."
                 },
+                new() {
+                    Title = "Paul Hanaoka Meetup", Category = "Technology",
+                    Date = new DateTime(2026, 8, 5, 18, 0, 0, DateTimeKind.Utc), Venue = "Tech Hub",
+                    Price = 20m, Capacity = 50, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/paul-hanaoka-6FqkGMOLskY-unsplash.jpg",
+                    Description = "Meetup with fellow developers and tech enthusiasts to discuss the future of AI and software engineering."
+                },
+                new() {
+                    Title = "Product School Bootcamp", Category = "Business",
+                    Date = new DateTime(2026, 10, 10, 9, 0, 0, DateTimeKind.Utc), Venue = "Startup Center",
+                    Price = 499m, Capacity = 100, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/product-school-dJICd7b_LlE-unsplash.jpg",
+                    Description = "An intensive bootcamp for aspiring product managers. Learn product strategy, roadmap planning, and execution."
+                },
+                new() {
+                    Title = "Terren Hurst Gathering", Category = "Music",
+                    Date = new DateTime(2026, 7, 30, 20, 0, 0, DateTimeKind.Utc), Venue = "Outdoor Amphitheater",
+                    Price = 75m, Capacity = 1500, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/terren-hurst-blgOFmPIlr0-unsplash.jpg",
+                    Description = "A vibrant outdoor music festival gathering featuring electronic and alternative acts."
+                },
+                new() {
+                    Title = "The Climate Reality Project", Category = "Business",
+                    Date = new DateTime(2026, 9, 15, 10, 0, 0, DateTimeKind.Utc), Venue = "Global Center",
+                    Price = 0m, Capacity = 1000, Status = EventStatus.Published, OrganizerId = organizer.UserId,
+                    ImageUrl = "/images/events/the-climate-reality-project-Hb6uWq0i4MI-unsplash.jpg",
+                    Description = "A free summit dedicated to discussing sustainable business practices and climate action plans."
+                }
             };
 
             db.Events.AddRange(events);

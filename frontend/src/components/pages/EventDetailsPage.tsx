@@ -52,7 +52,7 @@ export function EventDetailsPage() {
       {/* Hero Image */}
       <div className="relative h-72 md:h-96 bg-gray-200">
         <ImageWithFallback
-          src={CATEGORY_IMAGES[event.category] ?? ''}
+          src={event.imageUrl || (CATEGORY_IMAGES[event.category] ?? '')}
           alt={event.title}
           className="w-full h-full object-cover"
         />

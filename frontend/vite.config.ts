@@ -18,6 +18,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/images': {
+        target: 'https://localhost:7001',
+        changeOrigin: true,
+        secure: false,
+      },
       '/Events': {
         target: 'https://localhost:7001',
         changeOrigin: true,

@@ -101,10 +101,6 @@ export function CheckoutForm({ totalAmount, onSuccess, onError }: CheckoutFormPr
         )}
       </button>
 
-      {/* Test mode notice */}
-      <p className="text-center text-xs text-gray-400">
-        🔒 Stripe test mode — use card <code className="font-mono">4242 4242 4242 4242</code>, any future date &amp; any CVC
-      </p>
     </form>
   );
 }

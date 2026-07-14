@@ -18,7 +18,7 @@ namespace EventBooking.BLL.Services
 
         public async Task<RevenueSummaryDto> GetRevenueAsync(int eventId, int organizerId)
         {
-            var ev = await _eventRepo.GetByIdAsync(eventId)
+            var ev = await _eventRepo.GetByIdUnrestrictedAsync(eventId)
                 ?? throw new KeyNotFoundException($"Event {eventId} not found.");
 
             if (ev.OrganizerId != organizerId)

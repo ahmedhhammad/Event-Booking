@@ -21,7 +21,15 @@ async function request<T>(
   });
   if (!res.ok) {
     const text = await res.text().catch(() => res.statusText);
-    const err: ApiError = { status: res.status, message: text };
+    let message = text;
+    try {
+      const parsed = JSON.parse(text);
+      if (parsed.error) message = parsed.error;
+      else if (parsed.message) message = parsed.message;
+    } catch {
+      // fallback to raw text if not JSON
+    }
+    const err: ApiError = { status: res.status, message };
     throw err;
   }
   const text = await res.text();

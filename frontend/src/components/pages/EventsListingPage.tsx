@@ -55,7 +55,9 @@ export function EventsListingPage() {
   const updateParam = (key: string, value: string) => {
     const p = new URLSearchParams(searchParams);
     if (value) p.set(key, value); else p.delete(key);
-    p.set('page', '1');
+    if (key !== 'page') {
+      p.set('page', '1');
+    }
     setSearchParams(p);
   };
 

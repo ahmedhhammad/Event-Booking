@@ -91,3 +91,10 @@ dotnet ef migrations add <MigrationName> --project EventBooking.DAL --startup-pr
 ```
 
 > You do **not** need to run `dotnet ef database update` — the app applies migrations automatically on startup.
+
+
+## terminate proccesses
+
+- `taskkill /IM node.exe /F`
+- `taskkill /IM dotnet.exe /F`
+- `taskkill /IM code.exe /F`

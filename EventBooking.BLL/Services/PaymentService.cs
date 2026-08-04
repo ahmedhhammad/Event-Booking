@@ -186,5 +186,28 @@ namespace EventBooking.BLL.Services
 
             await _db.SaveChangesAsync();
         }
+
+        /// <inheritdoc/>
+        public async Task ConfirmPaymentAsync(string paymentIntentId)
+        {
+            // Verify with Stripe server-side — never trust the client alone
+            var service = new PaymentIntentService();
+            var intent = await service.GetAsync(paymentIntentId);
+
+            if (intent.Status != "succeeded")
+                throw new InvalidOperationException(
+                    $"PaymentIntent {paymentIntentId} is not succeeded (status: {intent.Status}).");
+
+            // Idempotent: if already Paid (e.g. webhook arrived first), skip
+            var payment = await _db.Payments
+                .FirstOrDefaultAsync(p => p.StripePaymentIntentId == paymentIntentId);
+
+            if (payment is null)
+                throw new KeyNotFoundException($"No payment record found for PaymentIntent {paymentIntentId}.");
+
+            if (payment.Status == "Paid") return; // Already confirmed — nothing to do
+
+            await UpdatePaymentStatus(paymentIntentId, paymentStatus: "Paid", bookingStatus: "Confirmed");
+        }
     }
 }

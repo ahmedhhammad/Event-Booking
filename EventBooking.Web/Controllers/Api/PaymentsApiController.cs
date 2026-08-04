@@ -73,7 +73,32 @@ namespace EventBooking.Web.Controllers.Api
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        /// <summary>
+        /// POST /api/payments/confirm
+        /// Called by the frontend after stripe.confirmPayment() resolves without error.
+        /// Verifies the PaymentIntent status with Stripe server-side, then marks the
+        /// Booking as Confirmed and Payment as Paid.
+        /// Idempotent — safe to call even if the webhook already processed it.
+        /// </summary>
+        [HttpPost("confirm")]
+        [Authorize(Roles = "Attendee")]
+        public async Task<IActionResult> ConfirmPayment([FromBody] ConfirmPaymentRequest req)
+        {
+            if (string.IsNullOrWhiteSpace(req.PaymentIntentId))
+                return BadRequest(new { error = "paymentIntentId is required." });
+
+            try
+            {
+                await _paymentService.ConfirmPaymentAsync(req.PaymentIntentId);
+                return Ok(new { message = "Booking confirmed." });
+            }
+            catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+            catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); }
+            catch (Exception ex) { return StatusCode(500, new { error = ex.Message }); }
+        }
     }
 
     public record CreateIntentRequest(int BookingId, decimal Amount);
+    public record ConfirmPaymentRequest(string PaymentIntentId);
 }

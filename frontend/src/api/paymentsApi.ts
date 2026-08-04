@@ -12,4 +12,11 @@ export const paymentsApi = {
    */
   createPaymentIntent: (bookingId: number, amount: number) =>
     api.post<CreateIntentResponse>('/api/payments/create-intent', { bookingId, amount }),
+
+  /**
+   * Notifies the backend that payment succeeded.
+   * The backend verifies with Stripe server-side before confirming the booking.
+   */
+  confirmPayment: (paymentIntentId: string) =>
+    api.post<{ message: string }>('/api/payments/confirm', { paymentIntentId }),
 };

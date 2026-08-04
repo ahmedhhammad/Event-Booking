@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
+import { paymentsApi } from '../api/paymentsApi';
 
 interface CheckoutFormProps {
   totalAmount: number;
+  paymentIntentId: string;
   onSuccess: () => void;
   onError: (message: string) => void;
 }
@@ -17,7 +19,7 @@ interface CheckoutFormProps {
  * Uses the Payment Element (not the legacy Card Element) per Stripe best practices.
  * Supports all payment methods configured in the Stripe Dashboard.
  */
-export function CheckoutForm({ totalAmount, onSuccess, onError }: CheckoutFormProps) {
+export function CheckoutForm({ totalAmount, paymentIntentId, onSuccess, onError }: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -58,7 +60,13 @@ export function CheckoutForm({ totalAmount, onSuccess, onError }: CheckoutFormPr
       onError(msg);
       setLoading(false);
     } else {
-      // Payment succeeded
+      // Payment succeeded — notify backend to confirm the booking
+      try {
+        await paymentsApi.confirmPayment(paymentIntentId);
+      } catch {
+        // Non-fatal: booking will still be confirmed by webhook eventually
+        console.warn('Backend confirm call failed, webhook will handle it.');
+      }
       onSuccess();
     }
   };

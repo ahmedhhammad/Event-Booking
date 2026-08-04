@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 // ── Step machine ─────────────────────────────────────────────────────────────
 type Step =
   | { id: 'select-quantity' }
-  | { id: 'payment'; bookingId: number; clientSecret: string }
+  | { id: 'payment'; bookingId: number; clientSecret: string; paymentIntentId: string }
   | { id: 'success'; bookingId: number };
 
 export function BookingCheckoutPage() {
@@ -92,12 +92,12 @@ export function BookingCheckoutPage() {
       const booking = await bookingsApi.createBooking(event.eventId, lineItems);
 
       // Create the Stripe PaymentIntent
-      const { clientSecret } = await paymentsApi.createPaymentIntent(
+      const { clientSecret, paymentIntentId } = await paymentsApi.createPaymentIntent(
         booking.bookingId,
         total
       );
 
-      setStep({ id: 'payment', bookingId: booking.bookingId, clientSecret });
+      setStep({ id: 'payment', bookingId: booking.bookingId, clientSecret, paymentIntentId });
     } catch (err) {
       const apiErr = err as ApiError;
       toast.error(apiErr?.message || 'Could not initialise payment. Please try again.');
@@ -296,6 +296,7 @@ export function BookingCheckoutPage() {
             >
               <CheckoutForm
                 totalAmount={total}
+                paymentIntentId={step.paymentIntentId}
                 onSuccess={handlePaymentSuccess}
                 onError={handlePaymentError}
               />

@@ -21,6 +21,14 @@ namespace EventBooking.BLL.Services
         /// Verifies the signature and updates Booking + Payment status based on the event type.
         /// </summary>
         Task HandleWebhookAsync(string payload, string stripeSignature);
+
+        /// <summary>
+        /// Called by the frontend after stripe.confirmPayment() resolves successfully.
+        /// Fetches the PaymentIntent from Stripe to verify it is truly "succeeded",
+        /// then marks the Payment as Paid and the Booking as Confirmed.
+        /// This is a reliable fallback for local dev where webhooks can't reach localhost.
+        /// </summary>
+        Task ConfirmPaymentAsync(string paymentIntentId);
     }
 
     public record PaymentIntentResult(string ClientSecret, string PaymentIntentId);

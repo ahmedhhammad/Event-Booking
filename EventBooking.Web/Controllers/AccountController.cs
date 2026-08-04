@@ -10,10 +10,12 @@ namespace EventBooking.Web.Controllers
     public class AccountController : Controller
     {
         private readonly AuthService _authService;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(AuthService authService)
+        public AccountController(AuthService authService, IConfiguration configuration)
         {
             _authService = authService;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -82,7 +84,8 @@ namespace EventBooking.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            var frontendUrl = _configuration["FrontendUrl"] ?? "http://localhost:5173";
+            return Redirect(frontendUrl);
         }
     }
 }
